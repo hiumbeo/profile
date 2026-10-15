@@ -1,0 +1,6 @@
+{
+  "name": "Discord Profile Page",
+  "description": "A public-facing Discord-style user profile page.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
