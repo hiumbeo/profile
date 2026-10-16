@@ -224,7 +224,6 @@ export function CustomizerModal({
     { id: 'discord_native', label: 'Discord Account Decor (Official)' },
     { id: 'cyberpunk', label: 'Cyberpunk Visor' },
     { id: 'sakura', label: 'Sakura Wreath' },
-    { id: 'cat_ears', label: 'Cat Ears' },
     { id: 'angel_halo', label: 'Angel Halo' },
     { id: 'demon_horns', label: 'Demon Horns' },
     { id: 'cosmic_ring', label: 'Cosmic Orbit' },
@@ -235,7 +234,7 @@ export function CustomizerModal({
   ];
 
   const weatherEffectsList: { id: WeatherEffectType; label: string; desc: string }[] = [
-    { id: 'rain', label: 'Rain Drops', desc: 'Rain streaks, glass droplets & distant lightning' },
+    { id: 'rain', label: 'Mưa & Sấm Sét ⚡', desc: 'Mưa bão chân thực với tia sét rạch trời & chớp sáng' },
     { id: 'sakura', label: 'Sakura Petals', desc: 'Floating pink cherry blossom leaves' },
     { id: 'snow', label: 'Falling Snow', desc: 'Soft peaceful drifting snowflakes' },
     { id: 'matrix', label: 'Matrix Code', desc: 'Falling digital green character streams' },
@@ -808,7 +807,10 @@ export function CustomizerModal({
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => updateConfig({ avatarDecor: item.id })}
+                      onClick={() => updateConfig({ 
+                        avatarDecor: item.id,
+                        ...(item.id === 'reyna_eye' ? { customAvatarDecorUrl: '/decorations/reyna_leer.gif' } : {})
+                      })}
                       className={`p-2.5 rounded-lg border text-left text-xs font-medium transition-all ${
                         config.avatarDecor === item.id
                           ? 'bg-purple-900/40 border-purple-500 text-white shadow'

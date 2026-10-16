@@ -8,24 +8,53 @@ interface AvatarDecorationProps {
 export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProps) {
   if (decor === 'none') return null;
 
+  const isImageDecor =
+    decor === 'reyna_eye' ||
+    decor === 'gif_decoration' ||
+    decor === 'discord_native' ||
+    decor === 'custom_decor';
+
+  const imageSrc =
+    decor === 'reyna_eye' || decor === 'gif_decoration'
+      ? '/decorations/reyna_leer.gif'
+      : (customDecorUrl || '/decorations/reyna_leer.gif');
+
   return (
-    <div className="absolute -top-4 -left-4 -right-4 -bottom-4 z-20 flex items-center justify-center pointer-events-none">
-      {/* 0. DISCORD OFFICIAL CDN AVATAR DECORATION */}
-      {((decor === 'discord_native' || decor === 'custom_decor') && customDecorUrl) && (
-        <img
-          src={customDecorUrl}
-          alt="Avatar Decoration"
-          className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] object-contain z-50 pointer-events-none"
-          onError={(e) => {
-            (e.currentTarget as HTMLElement).style.display = 'none';
-          }}
-        />
+    <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none select-none">
+      {/* 0. DISCORD REYNA LEER / OFFICIAL CDN / CUSTOM GIF DECORATION (PERFECTLY CENTERED, 0% OFFSET) */}
+      {isImageDecor && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+          <img
+            src={imageSrc}
+            alt="Avatar Decoration"
+            className="w-[124%] h-[124%] max-w-none max-h-none object-contain pointer-events-none select-none drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src =
+                'https://media.tenor.com/kiCMvLEIhckAAAAj/reyna%27s-leer-discord.gif';
+            }}
+          />
+        </div>
+      )}
+
+      {/* 1. SAKURA WREATH */}
+      {decor === 'sakura' && (
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
+          <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="44" stroke="#f472b6" strokeWidth="2" strokeDasharray="6 4" opacity="0.6" className="animate-spin origin-center" style={{ animationDuration: '24s' }} />
+            {/* Cherry Blossom Petals */}
+            <circle cx="20" cy="24" r="5" fill="#fbcfe8" filter="drop-shadow(0 0 4px #ec4899)" />
+            <circle cx="80" cy="24" r="5" fill="#fbcfe8" filter="drop-shadow(0 0 4px #ec4899)" />
+            <circle cx="14" cy="50" r="4" fill="#fda4af" />
+            <circle cx="86" cy="50" r="4" fill="#fda4af" />
+            <circle cx="26" cy="76" r="4.5" fill="#fbcfe8" />
+            <circle cx="74" cy="76" r="4.5" fill="#fbcfe8" />
+          </svg>
+        </div>
       )}
 
       {/* 2. CYBERPUNK HUD VISOR */}
-      {/* 2. CYBERPUNK HUD VISOR */}
       {decor === 'cyberpunk' && (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
             {/* Tech Corner Brackets */}
             <path d="M22 34 L18 34 L18 22 L30 22 L30 26" stroke="#00f0ff" strokeWidth="2.5" strokeLinecap="round" />
@@ -49,10 +78,9 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
         </div>
       )}
 
-
       {/* 4. ANGEL HALO */}
       {decor === 'angel_halo' && (
-        <div className="relative w-full h-full">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
             {/* Floating Radiant Halo */}
             <g className="animate-float">
@@ -72,7 +100,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
 
       {/* 5. DEMON HORNS */}
       {decor === 'demon_horns' && (
-        <div className="relative w-full h-full">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
             {/* Left Horn */}
             <path d="M26 28 C20 18 10 14 8 4 C18 10 26 18 32 24 Z" fill="#991b1b" stroke="#ef4444" strokeWidth="1.5" filter="drop-shadow(0 0 4px #dc2626)" />
@@ -86,7 +114,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
 
       {/* 6. COSMIC ORBIT RING */}
       {decor === 'cosmic_ring' && (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
             {/* Saturn Ring tilted */}
             <g transform="rotate(-25 50 50)">
@@ -102,7 +130,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
 
       {/* 7. GLITCH PIXEL CROWN */}
       {decor === 'glitch_crown' && (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
             {/* Crown Top */}
             <g className="animate-pulse">
@@ -122,7 +150,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
 
       {/* 8. FIRE FLAME AURA */}
       {decor === 'fire_aura' && (
-        <div className="relative w-full h-full">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full animate-pulse-glow" viewBox="0 0 100 100" fill="none">
             <circle cx="50" cy="50" r="44" stroke="url(#fireGradient)" strokeWidth="3" filter="drop-shadow(0 0 8px #f97316)" />
             {/* Flames */}
@@ -139,9 +167,10 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
           </svg>
         </div>
       )}
+
       {/* 9. WITCH HAT */}
       {decor === 'witch_hat' && (
-        <div className="relative w-full h-full">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full animate-float" viewBox="0 0 100 100" fill="none">
             <path d="M30 40 L50 10 L70 40 Z" fill="#4c1d95" stroke="#7e22ce" strokeWidth="2" />
             <rect x="25" y="40" width="50" height="8" fill="#4c1d95" stroke="#7e22ce" strokeWidth="2" rx="2" />
@@ -149,9 +178,10 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
           </svg>
         </div>
       )}
+
       {/* 10. MINIMAL NEON RING */}
       {decor === 'minimal_neon_ring' && (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full animate-spin" style={{ animationDuration: '8s' }} viewBox="0 0 100 100" fill="none">
             <circle cx="50" cy="50" r="46" stroke="#00f0ff" strokeWidth="2" strokeDasharray="10 4" opacity="0.6" />
           </svg>
@@ -160,21 +190,10 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
 
       {/* 11. SUBTLE HALO */}
       {decor === 'subtle_halo' && (
-        <div className="relative w-full h-full">
+        <div className="w-[120%] h-[120%] flex items-center justify-center shrink-0">
           <svg className="w-full h-full animate-float" viewBox="0 0 100 100" fill="none">
             <ellipse cx="50" cy="14" rx="22" ry="5" stroke="#ffffff" strokeWidth="2" opacity="0.7" />
           </svg>
-        </div>
-      )}
-
-      {/* 12. GIF DECORATION */}
-      {decor === 'gif_decoration' && (
-        <div className="absolute -top-12 -left-12 -right-12 -bottom-12 z-50 flex items-center justify-center pointer-events-none">
-          <img
-            src="https://tenor.com/mHZHYCeHaPJ.gif"
-            alt="GIF Decoration"
-            className="w-full h-full object-contain pointer-events-none"
-          />
         </div>
       )}
     </div>

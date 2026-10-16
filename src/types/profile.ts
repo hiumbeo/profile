@@ -1,7 +1,9 @@
 export type AvatarDecorType = 
   | 'none'
+  | 'reyna_eye'
   | 'discord_native'
   | 'cyberpunk'
+  | 'sakura'
   | 'angel_halo'
   | 'demon_horns'
   | 'cosmic_ring'
@@ -15,7 +17,7 @@ export type AvatarDecorType =
 
 export type StatusType = 'online' | 'idle' | 'dnd' | 'streaming' | 'offline';
 
-export type WeatherEffectType = 'rain' | 'snow' | 'matrix' | 'stars' | 'none';
+export type WeatherEffectType = 'rain' | 'snow' | 'matrix' | 'stars' | 'sakura' | 'none';
 
 export type BannerDecorType = 'none' | 'sparkles' | 'scanlines' | 'rain_drops' | 'matrix' | 'stars';
 

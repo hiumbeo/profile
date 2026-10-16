@@ -7,6 +7,7 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   pronouns: 'he/him',
   avatarUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&auto=format&fit=crop&q=80',
   avatarDecor: 'reyna_eye',
+  customAvatarDecorUrl: '/decorations/reyna_leer.gif',
   status: 'dnd',
   statusText: 'Đang chơi Roblox',
   statusEmoji: '🎮',
@@ -53,7 +54,7 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   socials: [
     { id: '1', platform: 'roblox', url: 'https://www.roblox.com/search/users?keyword=tyLNTV1706', label: 'Roblox', accountName: 'tyLNTV1706' },
   ],
-  backgroundEffect: 'matrix',
+  backgroundEffect: 'rain',
   profileEffect: 'sakura_drift_left',
   weatherIntensity: 8,
   audio: {
@@ -101,7 +102,6 @@ export const PRESETS: { id: string; name: string; description: string; config: P
       displayName: 'chilly lofi ☕',
       username: 'lofidreamer',
       pronouns: 'they/them',
-      avatarDecor: 'cat_ears',
       status: 'idle',
       statusText: 'sipping coffee & listening to rain ~ ☕',
       statusEmoji: '☕',

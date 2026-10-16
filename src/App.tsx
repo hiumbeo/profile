@@ -18,34 +18,38 @@ import {
   Heart
 } from 'lucide-react';
 
-const STORAGE_KEY = 'phu_profile_config_v4_reyna';
+const STORAGE_KEY = 'phu_profile_config_v9_rain_thunder';
 
 export default function App() {
   const [config, setConfig] = useState<ProfileConfig>(() => {
     try {
       if (typeof window !== 'undefined') {
+        // Purge old cached storage containing cat decor or old matrix/404 effect
+        localStorage.removeItem('phu_profile_config_v7_reyna_leer');
+        localStorage.removeItem('phu_profile_config_v4_reyna');
+        localStorage.removeItem('phu_profile_config_v3');
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
+          const decorUrl = (!parsed.customAvatarDecorUrl || parsed.customAvatarDecorUrl.includes('picmix') || parsed.customAvatarDecorUrl.includes('cat'))
+            ? '/decorations/reyna_leer.gif'
+            : parsed.customAvatarDecorUrl;
           return {
             ...DEFAULT_PROFILE,
             ...parsed,
-            username: '40wf',
-            displayName: 'Em dần xa đi',
-            avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm4ft_l3UP4HWpzArGJaabiH2Muv648CtDVcBwMQl43Q&s',
-            aboutMe: 'I am a curious learner who loves exploring new ideas and solving problems every day',
-            bio: 'I am a curious learner who loves exploring new ideas and solving problems every day',
-            bioLink: 'https://zyo.lol/z0j9',
-            statusText: 'Đang chơi Roblox',
-            avatarDecor: 'custom_decor',
-            customAvatarDecorUrl: 'https://img1.picmix.com/output/stamp/normal/8/5/6/0/2770658_53858.gif',
+            username: parsed.username || '40wf',
+            displayName: parsed.displayName || 'Em dần xa đi',
+            avatarUrl: parsed.avatarUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm4ft_l3UP4HWpzArGJaabiH2Muv648CtDVcBwMQl43Q&s',
+            aboutMe: parsed.aboutMe || 'I am a curious learner who loves exploring new ideas and solving problems every day',
+            bio: parsed.bio || 'I am a curious learner who loves exploring new ideas and solving problems every day',
+            bioLink: parsed.bioLink || 'https://zyo.lol/z0j9',
+            statusText: parsed.statusText || 'Đang chơi Roblox',
+            avatarDecor: parsed.avatarDecor === 'none' ? 'none' : 'reyna_eye',
+            customAvatarDecorUrl: decorUrl,
             profileEffect: 'sakura_drift_left',
             audio: {
               ...DEFAULT_PROFILE.audio,
-              title: 'I Love You So',
-              artist: 'The Walters',
-              type: 'youtube',
-              volume: 0.6,
+              ...(parsed.audio || {}),
             },
             activity: {
               type: 'game',
@@ -55,12 +59,14 @@ export default function App() {
               image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpdxiBL2Haw7rFib6J1m5bLRJ-6qoXKlZZFKkBRAMtqw&s=10',
               elapsedSeconds: 1240,
               totalDurationSeconds: 7200,
+              ...(parsed.activity || {}),
             },
-            bannerUrl: 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
+            bannerUrl: parsed.bannerUrl || 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
             accountCreatedDate: '26 thg 8, 2026',
             memberSince: '26 thg 8, 2026',
             serverMemberSince: '26 thg 8, 2026',
             backgroundEffect: 'rain',
+            weatherIntensity: 8,
           };
         }
       }
@@ -68,7 +74,13 @@ export default function App() {
       // Ignored
     }
 
-    return DEFAULT_PROFILE;
+    return {
+      ...DEFAULT_PROFILE,
+      avatarDecor: 'reyna_eye',
+      customAvatarDecorUrl: '/decorations/reyna_leer.gif',
+      backgroundEffect: 'rain',
+      weatherIntensity: 8,
+    };
   });
 
   const [isUnlocked, setIsUnlocked] = useState(false);

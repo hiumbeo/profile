@@ -6,6 +6,36 @@ interface BackgroundCanvasProps {
   intensity: number; // 1 to 10
 }
 
+interface RainDrop {
+  x: number;
+  y: number;
+  length: number;
+  speed: number;
+  opacity: number;
+  thickness: number;
+}
+
+interface Splash {
+  x: number;
+  y: number;
+  radius: number;
+  maxRadius: number;
+  opacity: number;
+}
+
+interface LightningBranch {
+  points: { x: number; y: number }[];
+  thickness: number;
+  alpha: number;
+}
+
+interface LightningStrike {
+  branches: LightningBranch[];
+  framesLeft: number;
+  maxFrames: number;
+  flashAlpha: number;
+}
+
 export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -26,36 +56,90 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
     };
     window.addEventListener('resize', handleResize);
 
-    // Weather particles setup
-    const countMultiplier = intensity / 5;
+    const countMultiplier = Math.max(0.5, intensity / 5);
 
-    // --- RAIN SETUP ---
-    interface RainDrop {
-      x: number;
-      y: number;
-      length: number;
-      speed: number;
-      opacity: number;
-    }
-    interface Splashes {
-      x: number;
-      y: number;
-      radius: number;
-      maxRadius: number;
-      opacity: number;
-    }
+    // --- RAIN & LIGHTNING STATE ---
     const rainDrops: RainDrop[] = [];
-    const splashes: Splashes[] = [];
-    const rainCount = Math.floor(120 * countMultiplier);
+    const splashes: Splash[] = [];
+    let activeStrike: LightningStrike | null = null;
+    let lightningTimer = 0;
+    let nextLightningInterval = Math.floor(160 + Math.random() * 220); // every ~3-6 seconds
+
+    const rainCount = Math.floor(180 * countMultiplier);
     for (let i = 0; i < rainCount; i++) {
       rainDrops.push({
-        x: Math.random() * width,
+        x: Math.random() * (width + 200) - 100,
         y: Math.random() * height,
-        length: 15 + Math.random() * 25,
-        speed: 14 + Math.random() * 12,
-        opacity: 0.2 + Math.random() * 0.4,
+        length: 18 + Math.random() * 28,
+        speed: 16 + Math.random() * 12,
+        opacity: 0.25 + Math.random() * 0.45,
+        thickness: 1 + Math.random() * 0.8,
       });
     }
+
+    // Function to generate a realistic branching lightning bolt
+    const generateLightning = (startX?: number): LightningStrike => {
+      const branches: LightningBranch[] = [];
+      const rootX = startX ?? (width * 0.15 + Math.random() * (width * 0.7));
+      const rootY = 0;
+
+      // Main trunk
+      const mainPoints: { x: number; y: number }[] = [{ x: rootX, y: rootY }];
+      let currentX = rootX;
+      let currentY = rootY;
+      const segments = Math.floor(18 + Math.random() * 12);
+      const targetY = height * (0.65 + Math.random() * 0.35);
+      const segmentHeight = targetY / segments;
+
+      for (let i = 1; i <= segments; i++) {
+        const sway = (Math.random() - 0.5) * 55;
+        currentX += sway;
+        currentY += segmentHeight * (0.8 + Math.random() * 0.4);
+        mainPoints.push({ x: currentX, y: currentY });
+
+        // Branching off the main trunk
+        if (Math.random() < 0.38 && i < segments - 2) {
+          const branchPoints: { x: number; y: number }[] = [{ x: currentX, y: currentY }];
+          let bx = currentX;
+          let by = currentY;
+          const branchLength = Math.floor(4 + Math.random() * 6);
+          const dir = sway > 0 ? 1 : -1;
+
+          for (let b = 0; b < branchLength; b++) {
+            bx += dir * (15 + Math.random() * 35) + (Math.random() - 0.5) * 20;
+            by += (segmentHeight * 0.75) + Math.random() * 15;
+            branchPoints.push({ x: bx, y: by });
+          }
+
+          branches.push({
+            points: branchPoints,
+            thickness: 1.2,
+            alpha: 0.75,
+          });
+        }
+      }
+
+      branches.unshift({
+        points: mainPoints,
+        thickness: 2.5,
+        alpha: 1,
+      });
+
+      return {
+        branches,
+        framesLeft: 8,
+        maxFrames: 8,
+        flashAlpha: 0.32,
+      };
+    };
+
+    // Allow user to trigger lightning by clicking the window
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (effect === 'rain') {
+        activeStrike = generateLightning(e.clientX);
+      }
+    };
+    window.addEventListener('click', handleGlobalClick);
 
     // --- SAKURA SETUP ---
     interface SakuraPetal {
@@ -139,70 +223,121 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
     }
     let shootingStar: { x: number; y: number; length: number; speed: number; opacity: number } | null = null;
 
-    let lightningTimer = 0;
-    let lightningFlash = 0;
-
     const render = () => {
-      // 1. CLEAR / TRAIL
+      // 1. CLEAR CANVAS
       if (effect === 'matrix') {
-        ctx.fillStyle = 'rgba(7, 10, 15, 0.12)';
+        ctx.fillStyle = 'rgba(7, 10, 15, 0.15)';
         ctx.fillRect(0, 0, width, height);
       } else {
         ctx.clearRect(0, 0, width, height);
       }
 
-      // 2. RAIN EFFECT
+      // 2. RAIN & LIGHTNING EFFECT (MƯA CÓ SÉT)
       if (effect === 'rain') {
-        // Lightning random trigger
+        // --- Lightning Strike Processing ---
         lightningTimer++;
-        if (lightningTimer > 300 + Math.random() * 400) {
-          lightningFlash = 0.18;
+        if (lightningTimer >= nextLightningInterval) {
+          activeStrike = generateLightning();
           lightningTimer = 0;
+          nextLightningInterval = Math.floor(180 + Math.random() * 260); // 3 to 7 seconds
         }
-        if (lightningFlash > 0) {
-          ctx.fillStyle = `rgba(255, 255, 255, ${lightningFlash})`;
+
+        // Draw sky illumination flash from thunder
+        if (activeStrike) {
+          const ratio = activeStrike.framesLeft / activeStrike.maxFrames;
+          // Flickering pulse effect characteristic of thunderbolts
+          const flicker = activeStrike.framesLeft % 2 === 0 ? 1 : 0.65;
+          const flashAlpha = activeStrike.flashAlpha * ratio * flicker;
+
+          // Sky ambient flash
+          ctx.fillStyle = `rgba(224, 242, 254, ${flashAlpha})`;
           ctx.fillRect(0, 0, width, height);
-          lightningFlash -= 0.015;
-        }
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        for (let i = 0; i < rainDrops.length; i++) {
-          const drop = rainDrops[i];
-          ctx.moveTo(drop.x, drop.y);
-          ctx.lineTo(drop.x - 3, drop.y + drop.length);
+          // Draw the electric bolts
+          for (const branch of activeStrike.branches) {
+            if (branch.points.length < 2) continue;
 
-          drop.y += drop.speed;
-          drop.x -= 1.5;
-
-          if (drop.y > height) {
-            // chance to create ground splash
-            if (Math.random() < 0.25) {
-              splashes.push({
-                x: drop.x,
-                y: height - Math.random() * 15,
-                radius: 1,
-                maxRadius: 4 + Math.random() * 4,
-                opacity: 0.2,
-              });
+            // Outer electric cyan glow
+            ctx.save();
+            ctx.strokeStyle = `rgba(56, 189, 248, ${branch.alpha * ratio * 0.7})`;
+            ctx.lineWidth = branch.thickness * 3.5;
+            ctx.shadowColor = '#38bdf8';
+            ctx.shadowBlur = 25;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'miter';
+            ctx.beginPath();
+            ctx.moveTo(branch.points[0].x, branch.points[0].y);
+            for (let p = 1; p < branch.points.length; p++) {
+              ctx.lineTo(branch.points[p].x, branch.points[p].y);
             }
-            drop.y = -drop.length;
-            drop.x = Math.random() * (width + 100);
+            ctx.stroke();
+
+            // Inner hot white lightning core
+            ctx.strokeStyle = `rgba(255, 255, 255, ${branch.alpha * ratio})`;
+            ctx.lineWidth = branch.thickness;
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.moveTo(branch.points[0].x, branch.points[0].y);
+            for (let p = 1; p < branch.points.length; p++) {
+              ctx.lineTo(branch.points[p].x, branch.points[p].y);
+            }
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          activeStrike.framesLeft--;
+          if (activeStrike.framesLeft <= 0) {
+            activeStrike = null;
           }
         }
-        ctx.stroke();
 
-        // Splashes
-        for (let i = splashes.length - 1; i >= 0; i--) {
-          const s = splashes[i];
-          ctx.strokeStyle = `rgba(255, 255, 255, ${s.opacity})`;
+        // --- Render Rain Drops ---
+        ctx.save();
+        ctx.lineCap = 'round';
+        for (let i = 0; i < rainDrops.length; i++) {
+          const drop = rainDrops[i];
+          const endX = drop.x - 2.8;
+          const endY = drop.y + drop.length;
+
+          ctx.strokeStyle = `rgba(215, 235, 255, ${drop.opacity})`;
+          ctx.lineWidth = drop.thickness;
           ctx.beginPath();
-          ctx.ellipse(s.x, s.y, s.radius * 2, s.radius, 0, 0, Math.PI * 2);
+          ctx.moveTo(drop.x, drop.y);
+          ctx.lineTo(endX, endY);
           ctx.stroke();
 
-          s.radius += 0.4;
-          s.opacity -= 0.04;
+          drop.y += drop.speed;
+          drop.x -= 2.2;
+
+          if (drop.y > height) {
+            // Chance to create ground splash ripples
+            if (Math.random() < 0.28) {
+              splashes.push({
+                x: drop.x,
+                y: height - Math.random() * 12,
+                radius: 1,
+                maxRadius: 5 + Math.random() * 5,
+                opacity: 0.35,
+              });
+            }
+            drop.y = -drop.length - Math.random() * 50;
+            drop.x = Math.random() * (width + 250);
+          }
+        }
+        ctx.restore();
+
+        // --- Render Rain Ground Splashes ---
+        for (let i = splashes.length - 1; i >= 0; i--) {
+          const s = splashes[i];
+          ctx.strokeStyle = `rgba(186, 230, 253, ${s.opacity})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.ellipse(s.x, s.y, s.radius * 2.2, s.radius * 0.7, 0, 0, Math.PI * 2);
+          ctx.stroke();
+
+          s.radius += 0.5;
+          s.opacity -= 0.035;
           if (s.opacity <= 0 || s.radius >= s.maxRadius) {
             splashes.splice(i, 1);
           }
@@ -250,24 +385,23 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         for (let i = 0; i < snowflakes.length; i++) {
           const s = snowflakes[i];
-          ctx.beginPath();
-          ctx.fillStyle = `rgba(220, 235, 255, ${s.opacity})`;
-          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-          ctx.fill();
-
           s.y += s.speedY;
           s.x += s.wind + Math.sin(s.y * 0.02) * 0.5;
 
-          if (s.y > height + 10) {
-            s.y = -10;
+          if (s.y > height) {
+            s.y = -5;
             s.x = Math.random() * width;
           }
           if (s.x > width + 10) s.x = -10;
           if (s.x < -10) s.x = width + 10;
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
-      // 5. MATRIX & CYAN-GREEN GLITCH EFFECT
+      // 5. MATRIX EFFECT (Clean digital rain without glitch tear)
       if (effect === 'matrix') {
         ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
         for (let i = 0; i < matrixDrops.length; i++) {
@@ -275,13 +409,13 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
           const x = i * fontSize;
           const y = matrixDrops[i] * fontSize;
 
-          // Head of drop is bright electric cyan-green
+          // Head of drop
           ctx.fillStyle = i % 3 === 0 ? '#00f0ff' : '#6ee7b7';
           ctx.shadowColor = '#00f0ff';
           ctx.shadowBlur = 6;
           ctx.fillText(text, x, y);
 
-          // Trail text in cyan/green
+          // Trail text
           ctx.shadowBlur = 0;
           ctx.fillStyle = i % 2 === 0 ? 'rgba(6, 182, 212, 0.75)' : 'rgba(34, 197, 94, 0.75)';
           ctx.fillText(characters.charAt(Math.floor(Math.random() * characters.length)), x, y - fontSize);
@@ -290,21 +424,6 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
             matrixDrops[i] = 0;
           }
           matrixDrops[i]++;
-        }
-
-        // Random horizontal glitch slice tear (hiệu ứng lỗi xanh xanh)
-        if (Math.random() < 0.12) {
-          const sliceY = Math.random() * height;
-          const sliceH = 4 + Math.random() * 22;
-          const offset = (Math.random() - 0.5) * 28;
-
-          try {
-            ctx.drawImage(canvas, 0, sliceY, width, sliceH, offset, sliceY, width, sliceH);
-            ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
-            ctx.fillRect(0, sliceY, width, sliceH);
-          } catch {
-            // Ignored
-          }
         }
       }
 
@@ -324,7 +443,6 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
           ctx.fill();
         }
 
-        // Shooting star
         if (!shootingStar && Math.random() < 0.008) {
           shootingStar = {
             x: Math.random() * (width * 0.7),
@@ -374,6 +492,7 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('click', handleGlobalClick);
     };
   }, [effect, intensity]);
 
@@ -383,7 +502,7 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-10 w-full h-full"
-      style={{ opacity: 0.5 }}
+      style={{ opacity: effect === 'rain' ? 0.85 : 0.6 }}
     />
   );
 }

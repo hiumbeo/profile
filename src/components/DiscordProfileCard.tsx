@@ -174,7 +174,7 @@ export function DiscordProfileCard({
 
               {/* Status Indicator */}
               <div 
-                className={`absolute bottom-1 right-1 w-6 h-6 rounded-full border-4 border-[#050505] flex items-center justify-center ${getStatusColor(config.status)}`}
+                className={`absolute bottom-1 right-1 w-6 h-6 rounded-full border-4 border-[#050505] flex items-center justify-center ${getStatusColor(config.status)} z-30`}
                 title={`Status: ${config.status}`}
               >
                 {config.status === 'idle' && (
