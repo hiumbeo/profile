@@ -18,21 +18,25 @@ export function ClickToEnterOverlay({ onEnter, displayName }: ClickToEnterOverla
       const i = loopNum % phrases.length;
       const fullText = phrases[i];
 
-      setText(isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1));
-
-      setTypingSpeed(isDeleting ? 30 : 150);
+      if (isDeleting) {
+        setText(fullText.substring(0, text.length - 1));
+        setTypingSpeed(30);
+      } else {
+        setText(fullText.substring(0, text.length + 1));
+        setTypingSpeed(150);
+      }
 
       if (!isDeleting && text === fullText) {
         setTimeout(() => setIsDeleting(true), 2000);
       } else if (isDeleting && text === '') {
         setIsDeleting(false);
-        setLoopNum(loopNum + 1);
+        setLoopNum((prev) => prev + 1);
       }
     };
 
     const timer = setTimeout(handleType, typingSpeed);
     return () => clearTimeout(timer);
-  }, [text, isDeleting, loopNum]);
+  }, [text, isDeleting, loopNum, phrases, typingSpeed]);
 
   return (
     <div

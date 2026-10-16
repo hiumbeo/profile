@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProfileConfig, StatusType } from '../types/profile';
 import { AvatarDecoration } from './AvatarDecoration';
 import { DiscordBadges } from './DiscordBadges';
 import { ActivityPlayer } from './ActivityPlayer';
-import { NightSkyEffect } from './NightSkyEffect';
+import { RainEffect } from './RainEffect';
 import { 
   Calendar, 
   Sparkles, 
@@ -35,6 +35,37 @@ export function DiscordProfileCard({
   const [msgSent, setMsgSent] = useState(false);
   const [dummyMsg, setDummyMsg] = useState('');
   const [heartBurst, setHeartBurst] = useState(false);
+
+  const [displayedTitle, setDisplayedTitle] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+  const phrases = ['My bio | Em dần xa đi', 'glight'];
+
+  useEffect(() => {
+    const handleType = () => {
+      const i = loopNum % phrases.length;
+      const fullText = phrases[i];
+
+      if (isDeleting) {
+        setDisplayedTitle(fullText.substring(0, displayedTitle.length - 1));
+        setTypingSpeed(30);
+      } else {
+        setDisplayedTitle(fullText.substring(0, displayedTitle.length + 1));
+        setTypingSpeed(150);
+      }
+
+      if (!isDeleting && displayedTitle === fullText) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && displayedTitle === '') {
+        setIsDeleting(false);
+        setLoopNum((prev) => prev + 1);
+      }
+    };
+
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [displayedTitle, isDeleting, loopNum, phrases, typingSpeed]);
 
   const handleCopyUsername = () => {
     navigator.clipboard.writeText(`@${config.username}`);
@@ -72,7 +103,7 @@ export function DiscordProfileCard({
       <div className="absolute inset-0 pointer-events-none z-30 opacity-20 bg-[linear-gradient(rgba(0,240,255,0)_50%,rgba(0,240,255,0.25)_50%)] bg-[length:100%_4px]" />
       
       {/* New Profile Effect */}
-      <NightSkyEffect />
+      <RainEffect />
 
       {/* 1. TOP BANNER (Fixed exact gif URL with cyber glitch decor) */}
       <div 
@@ -182,7 +213,8 @@ export function DiscordProfileCard({
                   textShadow: '0 0 14px rgba(0,240,255,0.4)',
                 }}
               >
-                My bio | Em dần xa đi
+                {displayedTitle}
+                <span className="animate-blink">|</span>
               </h2>
               {config.pronouns && (
                 <span className="text-[11px] font-medium text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded-md border border-cyan-500/20">

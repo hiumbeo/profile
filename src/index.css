@@ -7,6 +7,9 @@
     background-color: #0b0e14;
     overflow-x: hidden;
   }
+  h1, h2 {
+    font-family: 'Cookie', cursive;
+  }
 }
 
 /* Custom Discord-like scrollbar */
