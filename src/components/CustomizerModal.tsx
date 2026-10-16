@@ -115,8 +115,9 @@ export function CustomizerModal({
 
       // Apply fetched Discord data
       const patch: Partial<ProfileConfig> = {
-        displayName: data.displayName || config.displayName,
-        username: data.username || config.username,
+        // Force preferred values
+        displayName: 'Phú ⛧',
+        username: 'tyLNTV1706',
         avatarUrl: data.avatarUrl || config.avatarUrl,
         linkedDiscordId: data.id,
       };
