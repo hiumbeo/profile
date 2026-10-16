@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Halftone Screentone Pattern for Manga Vibe -->
+    <pattern id="mangaDots" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#52525b" opacity="0.45" />
+    </pattern>
+    <pattern id="brickPattern" width="60" height="28" patternUnits="userSpaceOnUse">
+      <rect width="60" height="28" fill="#1c1d22" stroke="#2e3038" stroke-width="1.5" />
+      <line x1="0" y1="14" x2="60" y2="14" stroke="#2e3038" stroke-width="1.5" />
+      <line x1="30" y1="0" x2="30" y2="14" stroke="#2e3038" stroke-width="1.5" />
+      <line x1="0" y1="14" x2="0" y2="28" stroke="#2e3038" stroke-width="1.5" />
+    </pattern>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#222329" />
+      <stop offset="100%" stop-color="#141518" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="500" height="500" fill="url(#bgGrad)" />
+
+  <!-- Left Brick Wall -->
+  <rect x="0" y="80" width="160" height="420" fill="url(#brickPattern)" opacity="0.6" />
+  <rect x="0" y="80" width="160" height="420" fill="url(#mangaDots)" />
+  <line x1="160" y1="80" x2="160" y2="500" stroke="#000000" stroke-width="4" />
+
+  <!-- Right Foliage / Bush Screentone -->
+  <path d="M 280 0 Q 320 80, 360 40 Q 420 100, 480 60 Q 500 140, 500 240 L 500 0 Z" fill="#2a2b33" opacity="0.8" />
+  <rect x="260" y="0" width="240" height="300" fill="url(#mangaDots)" />
+
+  <!-- Character Black Hoodie Body -->
+  <path d="M 90 500 C 100 420, 130 350, 190 325 C 210 350, 290 350, 310 325 C 370 350, 400 420, 410 500 Z" fill="#0d0e11" stroke="#000000" stroke-width="4" />
+  
+  <!-- Hoodie Collar & Creases -->
+  <path d="M 160 330 C 180 375, 320 375, 340 330 C 320 395, 180 395, 160 330 Z" fill="#18191f" stroke="#000000" stroke-width="3" />
+  <path d="M 195 355 L 195 420" stroke="#444654" stroke-width="3.5" stroke-linecap="round" />
+  <path d="M 305 355 L 305 425" stroke="#444654" stroke-width="3.5" stroke-linecap="round" />
+  <!-- Drawstring metal tips -->
+  <rect x="193" y="420" width="4" height="12" fill="#d4d4d8" rx="2" />
+  <rect x="303" y="425" width="4" height="12" fill="#d4d4d8" rx="2" />
+
+  <!-- Neck & Shadow -->
+  <path d="M 215 310 L 215 345 C 235 355, 265 355, 285 345 L 285 310 Z" fill="#cfcfd4" stroke="#000000" stroke-width="3" />
+  <path d="M 215 310 C 235 330, 265 330, 285 310 Z" fill="#0a0a0c" opacity="0.85" />
+
+  <!-- Face Shape -->
+  <polygon points="180,210 190,265 250,335 310,265 320,210 310,170 190,170" fill="#f4f4f5" stroke="#000000" stroke-width="3.5" />
+
+  <!-- Calm Manga Eyes -->
+  <!-- Left Eye -->
+  <g>
+    <!-- Eyebrow -->
+    <path d="M 190 220 C 205 215, 225 218, 230 222" stroke="#000000" stroke-width="3.5" stroke-linecap="round" fill="none" />
+    <!-- Upper lash (half-closed calm eye) -->
+    <path d="M 195 234 C 208 230, 222 230, 232 235" stroke="#000000" stroke-width="4.5" stroke-linecap="round" fill="none" />
+    <!-- Pupil / Iris -->
+    <circle cx="214" cy="237" r="5.5" fill="#18181b" stroke="#000000" stroke-width="2" />
+    <circle cx="212" cy="235" r="1.5" fill="#ffffff" />
+    <!-- Lower lash -->
+    <path d="M 204 246 C 212 248, 220 248, 226 245" stroke="#000000" stroke-width="2.5" fill="none" />
+  </g>
+
+  <!-- Right Eye -->
+  <g>
+    <!-- Eyebrow -->
+    <path d="M 270 222 C 275 218, 295 215, 310 220" stroke="#000000" stroke-width="3.5" stroke-linecap="round" fill="none" />
+    <!-- Upper lash -->
+    <path d="M 268 235 C 278 230, 292 230, 305 234" stroke="#000000" stroke-width="4.5" stroke-linecap="round" fill="none" />
+    <!-- Pupil / Iris -->
+    <circle cx="286" cy="237" r="5.5" fill="#18181b" stroke="#000000" stroke-width="2" />
+    <circle cx="284" cy="235" r="1.5" fill="#ffffff" />
+    <!-- Lower lash -->
+    <path d="M 274 245 C 280 248, 288 248, 296 246" stroke="#000000" stroke-width="2.5" fill="none" />
+  </g>
+
+  <!-- Nose -->
+  <line x1="250" y1="260" x2="250" y2="272" stroke="#000000" stroke-width="3" stroke-linecap="round" />
+  <circle cx="248" cy="272" r="1.5" fill="#000000" />
+
+  <!-- Mouth (Straight, calm) -->
+  <path d="M 238 296 C 246 295, 254 295, 262 296" stroke="#000000" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- Iconic Spiky White Hair -->
+  <!-- Back hair volume -->
+  <path d="M 150 200 C 130 140, 160 80, 240 60 C 330 50, 370 120, 360 210 C 350 240, 330 260, 320 265 L 320 200 L 180 200 Z" fill="#ffffff" stroke="#000000" stroke-width="4" />
+  
+  <!-- Foreground Hair Strands & Bangs -->
+  <!-- Top Center Spikes -->
+  <path d="M 245 60 C 250 30, 258 35, 252 65" fill="#ffffff" stroke="#000000" stroke-width="3.5" />
+  <path d="M 230 70 C 235 45, 242 50, 238 75" fill="#ffffff" stroke="#000000" stroke-width="3.5" />
+  
+  <!-- Left Bangs -->
+  <path d="M 175 140 C 160 190, 185 240, 180 250 C 190 230, 195 210, 190 190 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+  <path d="M 190 160 C 185 205, 210 230, 205 240 C 215 220, 218 200, 210 170 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+  <path d="M 215 150 C 215 200, 235 225, 230 238 C 240 210, 242 190, 235 160 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+  
+  <!-- Middle Center Split Bangs -->
+  <path d="M 238 150 C 242 195, 252 215, 248 230 C 255 210, 258 190, 252 150 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+  <path d="M 255 150 C 258 190, 265 215, 262 232 C 270 210, 272 195, 268 150 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+
+  <!-- Right Bangs -->
+  <path d="M 270 160 C 275 200, 295 225, 300 240 C 298 220, 295 200, 290 165 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+  <path d="M 292 165 C 300 205, 318 230, 322 250 C 318 230, 312 210, 305 170 Z" fill="#ffffff" stroke="#000000" stroke-width="3" />
+
+  <!-- Manga Shading Cross-hatches on hair & cheek -->
+  <line x1="185" y1="260" x2="195" y2="255" stroke="#a1a1aa" stroke-width="1.5" />
+  <line x1="187" y1="264" x2="197" y2="259" stroke="#a1a1aa" stroke-width="1.5" />
+  <line x1="305" y1="260" x2="315" y2="255" stroke="#a1a1aa" stroke-width="1.5" />
+  <line x1="303" y1="264" x2="313" y2="259" stroke="#a1a1aa" stroke-width="1.5" />
+</svg>

@@ -350,45 +350,107 @@ app.get('/api/discord/user/:userId', async (req: Request, res: Response) => {
   }
 });
 
+interface StatsData {
+  views: number;
+  likes: number;
+  uniqueVisitors: string[];
+  lastUpdated: number;
+}
+
 const STATS_FILE = path.join(__dirname, 'stats.json');
 
-function loadStats(): { views: number; likes: number } {
+function loadStats(): StatsData {
   try {
     if (fs.existsSync(STATS_FILE)) {
       const raw = fs.readFileSync(STATS_FILE, 'utf-8');
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      return {
+        views: typeof parsed.views === 'number' && parsed.views > 0 ? parsed.views : 1,
+        likes: typeof parsed.likes === 'number' && parsed.likes >= 0 ? parsed.likes : 0,
+        uniqueVisitors: Array.isArray(parsed.uniqueVisitors) ? parsed.uniqueVisitors : [],
+        lastUpdated: parsed.lastUpdated || Date.now(),
+      };
     }
-  } catch {
-    // fallback
+  } catch (err) {
+    console.error('Error reading stats.json, initializing default', err);
   }
-  return { views: 1, likes: 0 };
+  return { views: 1, likes: 0, uniqueVisitors: [], lastUpdated: Date.now() };
 }
 
-function saveStats(stats: { views: number; likes: number }) {
+function saveStats(stats: StatsData) {
   try {
+    // Keep visitor IDs capped to prevent unlimited file growth
+    if (stats.uniqueVisitors.length > 5000) {
+      stats.uniqueVisitors = stats.uniqueVisitors.slice(-3000);
+    }
+    stats.lastUpdated = Date.now();
     fs.writeFileSync(STATS_FILE, JSON.stringify(stats, null, 2), 'utf-8');
-  } catch {
-    // fallback
+  } catch (err) {
+    console.error('Failed to write stats.json', err);
   }
 }
 
-let currentStats = loadStats();
+let currentStats: StatsData = loadStats();
 
-// 3. API: Views & Likes stats
-app.get('/api/stats', (_req: Request, res: Response) => {
-  return res.json(currentStats);
+// Track live active sessions (visitorId or IP -> timestamp)
+const activeSessions = new Map<string, number>();
+
+function getCleanOnlineCount(): number {
+  const now = Date.now();
+  for (const [id, lastSeen] of activeSessions.entries()) {
+    if (now - lastSeen > 25000) {
+      activeSessions.delete(id);
+    }
+  }
+  return Math.max(1, activeSessions.size);
+}
+
+// 3. API: Views, Likes, and Live Online stats
+app.get('/api/stats', (req: Request, res: Response) => {
+  const visitorId = (req.query.visitorId as string) || req.ip || 'anonymous';
+  activeSessions.set(visitorId, Date.now());
+
+  return res.json({
+    views: currentStats.views,
+    likes: currentStats.likes,
+    onlineCount: getCleanOnlineCount(),
+    serverTime: Date.now(),
+  });
 });
 
-app.post('/api/stats/view', (_req: Request, res: Response) => {
-  currentStats.views += 1;
-  saveStats(currentStats);
-  return res.json(currentStats);
+app.post('/api/stats/view', (req: Request, res: Response) => {
+  const visitorId = req.body?.visitorId || (req.query.visitorId as string) || req.ip || `vis_${Date.now()}`;
+  activeSessions.set(visitorId, Date.now());
+
+  // Only increment if not recently counted for this visitor
+  if (!currentStats.uniqueVisitors.includes(visitorId)) {
+    currentStats.views += 1;
+    currentStats.uniqueVisitors.push(visitorId);
+    saveStats(currentStats);
+  }
+
+  return res.json({
+    views: currentStats.views,
+    likes: currentStats.likes,
+    onlineCount: getCleanOnlineCount(),
+  });
 });
 
-app.post('/api/stats/like', (_req: Request, res: Response) => {
-  currentStats.likes += 1;
+app.post('/api/stats/like', (req: Request, res: Response) => {
+  const visitorId = req.body?.visitorId || (req.query.visitorId as string) || req.ip || 'anonymous';
+  const incrementBy = typeof req.body?.count === 'number' && req.body.count > 0 && req.body.count <= 50 
+    ? Math.floor(req.body.count) 
+    : 1;
+
+  activeSessions.set(visitorId, Date.now());
+  currentStats.likes += incrementBy;
   saveStats(currentStats);
-  return res.json(currentStats);
+
+  return res.json({
+    views: currentStats.views,
+    likes: currentStats.likes,
+    onlineCount: getCleanOnlineCount(),
+  });
 });
 
 // Serve public music files

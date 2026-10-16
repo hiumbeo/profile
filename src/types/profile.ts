@@ -41,9 +41,25 @@ export interface DiscordServer {
 export interface DiscordFriend {
   id: string;
   name: string;
+  username?: string;
   avatarUrl: string;
-  status?: StatusType;
+  status: StatusType;
   customStatus?: string;
+  relationship?: string; // e.g. '👑 Bestie', '🎮 Duo Partner', '⚡ Tri Kỷ'
+  avatarDecor?: AvatarDecorType;
+  customDecorUrl?: string;
+  activity?: {
+    type: 'game' | 'spotify' | 'streaming' | 'custom';
+    name: string;
+    details?: string;
+    state?: string;
+    iconUrl?: string;
+  };
+  badges?: string[];
+  bannerUrl?: string;
+  bio?: string;
+  discordId?: string;
+  link?: string;
 }
 
 export interface ProfileRole {
