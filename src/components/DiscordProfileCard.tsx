@@ -182,7 +182,7 @@ export function DiscordProfileCard({
                   textShadow: '0 0 14px rgba(0,240,255,0.4)',
                 }}
               >
-                {config.displayName}
+                My bio | Em dần xa đi
               </h2>
               {config.pronouns && (
                 <span className="text-[11px] font-medium text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded-md border border-cyan-500/20">
@@ -218,7 +218,7 @@ export function DiscordProfileCard({
           {/* About Me */}
           <div className="space-y-2">
             <h3 className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
-              About Me
+              My bio | Em dần xa đi
             </h3>
             <p className="text-xs text-gray-200 leading-relaxed font-sans bg-black/30 p-2.5 rounded-lg border border-cyan-500/15">
               {config.aboutMe || config.bio || 'I am a curious learner who loves exploring new ideas and solving problems every day'}

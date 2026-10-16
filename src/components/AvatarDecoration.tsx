@@ -9,13 +9,13 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
   if (decor === 'none') return null;
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center scale-125">
+    <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center">
       {/* 0. DISCORD OFFICIAL CDN AVATAR DECORATION */}
       {((decor === 'discord_native' || decor === 'custom_decor') && customDecorUrl) && (
         <img
           src={customDecorUrl}
           alt="Avatar Decoration"
-          className="absolute inset-0 w-full h-full object-contain z-50 pointer-events-none scale-[1.5]"
+          className="absolute inset-0 w-full h-full object-contain z-50 pointer-events-none"
           onError={(e) => {
             (e.currentTarget as HTMLElement).style.display = 'none';
           }}
