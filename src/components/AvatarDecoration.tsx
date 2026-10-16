@@ -9,7 +9,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
   if (decor === 'none') return null;
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center">
+    <div className="absolute -top-4 -left-4 -right-4 -bottom-4 z-20 flex items-center justify-center pointer-events-none">
       {/* 0. DISCORD OFFICIAL CDN AVATAR DECORATION */}
       {((decor === 'discord_native' || decor === 'custom_decor') && customDecorUrl) && (
         <img

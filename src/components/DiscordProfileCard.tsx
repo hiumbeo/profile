@@ -118,19 +118,19 @@ export function DiscordProfileCard({
         <div className="absolute inset-0 bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-25" />
 
         {/* Top Left Glitch Tag */}
-        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/60 backdrop-blur-md border border-cyan-500/30 text-[10px] font-mono text-cyan-300 tracking-wider">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-          <span>GLITCH · ACTIVE</span>
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-gray-300 tracking-wider">
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+          <span>STATUS · ACTIVE</span>
         </div>
 
         {/* Top Right: Views Counter & Like Button (Replaces Customizer) */}
         <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
           {/* View Counter */}
           <div 
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-cyan-500/30 text-xs text-cyan-300 font-mono shadow-md"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-xs text-gray-300 font-mono shadow-md"
             title="Tổng số lượt xem trang hồ sơ"
           >
-            <Eye className="w-3.5 h-3.5 text-cyan-400" />
+            <Eye className="w-3.5 h-3.5 text-gray-400" />
             <span>{views.toLocaleString()}</span>
           </div>
 
@@ -139,14 +139,14 @@ export function DiscordProfileCard({
             onClick={handleLikeClick}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md border transition-all text-xs font-mono shadow-md cursor-pointer select-none ${
               hasLiked
-                ? 'bg-rose-950/90 border-rose-500 text-rose-300 scale-105 shadow-[0_0_12px_rgba(244,63,94,0.4)]'
-                : 'bg-black/70 hover:bg-black/90 border-rose-500/30 hover:border-rose-500 text-rose-400 hover:scale-105'
+                ? 'bg-white/20 border-white/50 text-white scale-105 shadow-[0_0_12px_rgba(255,255,255,0.4)]'
+                : 'bg-black/70 hover:bg-black/90 border-white/10 hover:border-white/30 text-gray-400 hover:text-white hover:scale-105'
             } ${heartBurst ? 'scale-125' : ''}`}
             title="Bấm để thả tim hồ sơ này!"
           >
             <Heart 
               className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                hasLiked ? 'fill-rose-500 text-rose-500' : 'text-rose-400'
+                hasLiked ? 'fill-white text-white' : 'text-gray-400'
               } ${heartBurst ? 'animate-ping' : ''}`} 
             />
             <span>{likes.toLocaleString()}</span>
@@ -216,15 +216,14 @@ export function DiscordProfileCard({
               <h2 
                 className="text-xl font-bold text-white tracking-tight"
                 style={{
-                  color: config.accentColor || '#00f0ff',
-                  textShadow: '0 0 14px rgba(0,240,255,0.4)',
+                  color: '#ffffff',
                 }}
               >
                 {displayedTitle}
                 <span className="animate-blink">|</span>
               </h2>
               {config.pronouns && (
-                <span className="text-[11px] font-medium text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded-md border border-cyan-500/20">
+                <span className="text-[11px] font-medium text-gray-400 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
                   {config.pronouns}
                 </span>
               )}
@@ -236,16 +235,16 @@ export function DiscordProfileCard({
               </span>
               <button
                 onClick={handleCopyUsername}
-                className="text-gray-500 hover:text-cyan-400 p-0.5 transition-colors"
+                className="text-gray-500 hover:text-white p-0.5 transition-colors"
                 title="Sao chép username"
               >
-                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                {copied ? <Check className="w-3 h-3 text-white" /> : <Copy className="w-3 h-3" />}
               </button>
             </div>
 
             {/* Custom Status */}
             {config.statusText && (
-              <div className="mt-2.5 flex items-center gap-2 text-xs text-gray-200 bg-black/35 py-1.5 px-2.5 rounded-lg border border-cyan-500/10">
+              <div className="mt-2.5 flex items-center gap-2 text-xs text-gray-300 bg-white/5 py-1.5 px-2.5 rounded-lg border border-white/10">
                 {config.statusEmoji && <span className="text-sm">{config.statusEmoji}</span>}
                 <span className="truncate">{config.statusText}</span>
               </div>
@@ -256,10 +255,10 @@ export function DiscordProfileCard({
 
           {/* About Me */}
           <div className="space-y-2">
-            <h3 className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
+            <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
               My bio | Em dần xa đi
             </h3>
-            <p className="text-xs text-gray-200 leading-relaxed font-sans bg-black/30 p-2.5 rounded-lg border border-cyan-500/15">
+            <p className="text-xs text-gray-300 leading-relaxed font-sans bg-white/5 p-2.5 rounded-lg border border-white/10">
               {config.aboutMe || config.bio || 'I am a curious learner who loves exploring new ideas and solving problems every day'}
             </p>
 
