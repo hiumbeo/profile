@@ -2,13 +2,15 @@ export type AvatarDecorType =
   | 'none'
   | 'discord_native'
   | 'cyberpunk'
-  | 'cat_ears'
   | 'angel_halo'
   | 'demon_horns'
   | 'cosmic_ring'
   | 'glitch_crown'
   | 'fire_aura'
   | 'witch_hat'
+  | 'minimal_neon_ring'
+  | 'subtle_halo'
+  | 'gif_decoration'
   | 'custom_decor';
 
 export type StatusType = 'online' | 'idle' | 'dnd' | 'streaming' | 'offline';

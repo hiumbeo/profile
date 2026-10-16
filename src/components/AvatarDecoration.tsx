@@ -49,24 +49,6 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
         </div>
       )}
 
-      {/* 3. KAWAII CAT EARS */}
-      {decor === 'cat_ears' && (
-        <div className="relative w-full h-full">
-          <svg className="w-full h-full animate-float" viewBox="0 0 100 100" fill="none">
-            {/* Left Ear */}
-            <path d="M18 32 C14 12 28 6 38 18 C30 24 24 28 18 32Z" fill="#1e1b4b" stroke="#818cf8" strokeWidth="2" />
-            <path d="M22 28 C20 16 28 12 34 20 C28 23 25 26 22 28Z" fill="#f472b6" />
-            {/* Right Ear */}
-            <path d="M82 32 C86 12 72 6 62 18 C70 24 76 28 82 32Z" fill="#1e1b4b" stroke="#818cf8" strokeWidth="2" />
-            <path d="M78 28 C80 16 72 12 66 20 C72 23 75 26 78 28Z" fill="#f472b6" />
-            
-            {/* Small Stars / Whiskers */}
-            <circle cx="12" cy="50" r="2" fill="#818cf8" />
-            <circle cx="88" cy="50" r="2" fill="#818cf8" />
-            <circle cx="50" cy="94" r="3" fill="#f472b6" opacity="0.7" />
-          </svg>
-        </div>
-      )}
 
       {/* 4. ANGEL HALO */}
       {decor === 'angel_halo' && (
@@ -165,6 +147,34 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
             <rect x="25" y="40" width="50" height="8" fill="#4c1d95" stroke="#7e22ce" strokeWidth="2" rx="2" />
             <circle cx="50" cy="25" r="5" fill="#fbcfe8" />
           </svg>
+        </div>
+      )}
+      {/* 10. MINIMAL NEON RING */}
+      {decor === 'minimal_neon_ring' && (
+        <div className="relative w-full h-full flex items-center justify-center">
+          <svg className="w-full h-full animate-spin" style={{ animationDuration: '8s' }} viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="46" stroke="#00f0ff" strokeWidth="2" strokeDasharray="10 4" opacity="0.6" />
+          </svg>
+        </div>
+      )}
+
+      {/* 11. SUBTLE HALO */}
+      {decor === 'subtle_halo' && (
+        <div className="relative w-full h-full">
+          <svg className="w-full h-full animate-float" viewBox="0 0 100 100" fill="none">
+            <ellipse cx="50" cy="14" rx="22" ry="5" stroke="#ffffff" strokeWidth="2" opacity="0.7" />
+          </svg>
+        </div>
+      )}
+
+      {/* 12. GIF DECORATION */}
+      {decor === 'gif_decoration' && (
+        <div className="absolute -top-12 -left-12 -right-12 -bottom-12 z-50 flex items-center justify-center pointer-events-none">
+          <img
+            src="https://tenor.com/mHZHYCeHaPJ.gif"
+            alt="GIF Decoration"
+            className="w-full h-full object-contain pointer-events-none"
+          />
         </div>
       )}
     </div>
