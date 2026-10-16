@@ -37,8 +37,8 @@ export default function App() {
             bio: 'I am a curious learner who loves exploring new ideas and solving problems every day',
             bioLink: 'https://zyo.lol/z0j9',
             statusText: 'Đang chơi Roblox',
-            avatarDecor: 'reyna_eye',
-            customAvatarDecorUrl: undefined,
+            avatarDecor: 'custom_decor',
+            customAvatarDecorUrl: 'https://img1.picmix.com/output/stamp/normal/8/5/6/0/2770658_53858.gif',
             profileEffect: 'sakura_drift_left',
             audio: {
               ...DEFAULT_PROFILE.audio,
@@ -296,9 +296,9 @@ export default function App() {
       <header className="relative z-30 w-full max-w-5xl px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-gray-400">
           <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
-          <span className="text-white font-bold tracking-tight">PHÚ'S PROFILE</span>
+          <span className="text-white font-bold tracking-tight">EM DẦN XA ĐI'S PROFILE</span>
           <span className="text-gray-600 hidden sm:inline">·</span>
-          <span className="text-cyan-400 font-mono font-semibold hidden sm:inline">ROBLOX: tyLNTV1706</span>
+          <span className="text-cyan-400 font-mono font-semibold hidden sm:inline">ROBLOX: 40wf</span>
         </div>
 
         {/* Action Controls */}
@@ -396,9 +396,9 @@ export default function App() {
       {/* 5. Bottom Footer (Clean, No customizer button) */}
       <footer className="relative z-20 w-full py-4 px-4 text-center text-xs text-gray-500">
         <p className="flex items-center justify-center gap-2 flex-wrap">
-          <span>Phú · Official Discord Profile</span>
+          <span>Em dần xa đi · Official Discord Profile</span>
           <span aria-hidden="true">·</span>
-          <span className="text-cyan-400/80 font-mono">Roblox: tyLNTV1706</span>
+          <span className="text-cyan-400/80 font-mono">Roblox: 40wf</span>
           <span aria-hidden="true">·</span>
           <span>4 Tracks Karaoke Synced</span>
         </p>

@@ -8,7 +8,8 @@ export type AvatarDecorType =
   | 'cosmic_ring'
   | 'glitch_crown'
   | 'fire_aura'
-  | 'witch_hat';
+  | 'witch_hat'
+  | 'custom_decor';
 
 export type StatusType = 'online' | 'idle' | 'dnd' | 'streaming' | 'offline';
 

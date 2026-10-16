@@ -11,11 +11,11 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
   return (
     <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center scale-125">
       {/* 0. DISCORD OFFICIAL CDN AVATAR DECORATION */}
-      {decor === 'discord_native' && customDecorUrl && (
+      {((decor === 'discord_native' || decor === 'custom_decor') && customDecorUrl) && (
         <img
           src={customDecorUrl}
-          alt="Discord Avatar Decoration"
-          className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_10px_rgba(168,85,247,0.3)] animate-float"
+          alt="Avatar Decoration"
+          className="absolute inset-0 w-full h-full object-contain z-50 pointer-events-none scale-[1.5]"
           onError={(e) => {
             (e.currentTarget as HTMLElement).style.display = 'none';
           }}
