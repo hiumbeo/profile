@@ -27,7 +27,7 @@ export function RainEffect() {
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
-      ctx.strokeStyle = 'rgba(173, 216, 230, 0.3)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
       ctx.lineWidth = 1;
       drops.forEach(d => {
         ctx.beginPath();
@@ -44,5 +44,5 @@ export function RainEffect() {
     animate();
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-20 w-full h-full opacity-50" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-20 w-full h-full opacity-20" />;
 }

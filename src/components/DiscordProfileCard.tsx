@@ -98,9 +98,10 @@ export function DiscordProfileCard({
   };
 
   return (
-    <div className="relative w-full max-w-[420px] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-cyan-500/30 transition-all duration-300 bg-[#111214]/95 backdrop-blur-xl group">
-      {/* Subtle cyber glitch scanning line overlay */}
-      <div className="absolute inset-0 pointer-events-none z-30 opacity-20 bg-[linear-gradient(rgba(0,240,255,0)_50%,rgba(0,240,255,0.25)_50%)] bg-[length:100%_4px]" />
+    <div className="relative w-full max-w-[420px] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,1)] border border-white/5 transition-all duration-300 bg-[#050505]/80 backdrop-blur-md group">
+      {/* Subtle cyber glitch scanning line overlay & Mood Overlay */}
+      <div className="absolute inset-0 pointer-events-none z-30 opacity-[0.03] bg-[linear-gradient(rgba(0,240,255,0)_50%,rgba(0,240,255,0.25)_50%)] bg-[length:100%_4px]" />
+      <div className="absolute inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.8)_100%)]" />
       
       {/* New Profile Effect */}
       <RainEffect />
@@ -158,7 +159,7 @@ export function DiscordProfileCard({
         <div className="flex items-end justify-between -mt-14 mb-3">
           {/* Avatar Container with Decoration & Status */}
           <div className="relative group/avatar">
-            <div className="w-24 h-24 rounded-full bg-[#111214] p-1.5 relative shadow-xl border border-cyan-500/20">
+            <div className="w-24 h-24 rounded-full bg-[#050505] p-1.5 relative shadow-xl border border-white/5">
               <div className="w-full h-full rounded-full overflow-hidden bg-black/40">
                 <img
                   src={config.avatarUrl}
@@ -173,14 +174,14 @@ export function DiscordProfileCard({
 
               {/* Status Indicator */}
               <div 
-                className={`absolute bottom-1 right-1 w-6 h-6 rounded-full border-4 border-[#111214] flex items-center justify-center ${getStatusColor(config.status)}`}
+                className={`absolute bottom-1 right-1 w-6 h-6 rounded-full border-4 border-[#050505] flex items-center justify-center ${getStatusColor(config.status)}`}
                 title={`Status: ${config.status}`}
               >
                 {config.status === 'idle' && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#111214] -ml-1 -mt-1" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#050505] -ml-1 -mt-1" />
                 )}
                 {config.status === 'dnd' && (
-                  <div className="w-2.5 h-0.5 bg-[#111214] rounded-full" />
+                  <div className="w-2.5 h-0.5 bg-[#050505] rounded-full" />
                 )}
                 {config.status === 'streaming' && (
                   <div className="w-1.5 h-1.5 bg-white rounded-full" />
@@ -199,6 +200,12 @@ export function DiscordProfileCard({
           <div className="mb-2">
             <DiscordBadges badges={config.badges} />
           </div>
+        </div>
+
+        {/* 1 Friend in Common */}
+        <div className="flex items-center gap-2 mb-3 px-1 text-xs text-gray-400">
+           <div className="w-5 h-5 rounded-full bg-gray-800 flex items-center justify-center text-[10px]">?</div>
+           <span>1 Bạn Chung</span>
         </div>
 
         {/* 3. USER INFO */}

@@ -6,7 +6,7 @@ import { BackgroundCanvas } from './components/BackgroundCanvas';
 import { DiscordProfileCard } from './components/DiscordProfileCard';
 import { ClickToEnterOverlay } from './components/ClickToEnterOverlay';
 import { SyncedLyricsPlayer } from './components/SyncedLyricsPlayer';
-import { PasswordModal } from './components/PasswordModal';
+import { AvatarDecoration } from './components/AvatarDecoration';
 import { PLAYLIST_TRACKS } from './utils/lyricsData';
 import { 
   Volume2, 
@@ -60,7 +60,7 @@ export default function App() {
             accountCreatedDate: '26 thg 8, 2026',
             memberSince: '26 thg 8, 2026',
             serverMemberSince: '26 thg 8, 2026',
-            backgroundEffect: 'matrix',
+            backgroundEffect: 'rain',
           };
         }
       }
@@ -282,135 +282,54 @@ export default function App() {
   };
 
   return (
-    <main className="relative min-h-screen w-full flex flex-col justify-between items-center overflow-x-hidden bg-[#070a0e] text-white selection:bg-cyan-500 selection:text-black">
-      {/* 1. Dynamic Canvas Weather Background (Glitch Matrix / Rain) */}
+    <main className="relative min-h-screen w-full overflow-hidden bg-[#000000] text-gray-300 selection:bg-cyan-500 selection:text-black">
+      {/* Dynamic Background */}
       <BackgroundCanvas
         effect={config.backgroundEffect}
         intensity={config.weatherIntensity}
       />
 
-      {/* Atmospheric Glitch Cyber Vignette */}
-      <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_center,rgba(0,240,255,0.06)_0%,rgba(0,0,0,0.85)_100%)]" />
+      {/* Swipeable Container */}
+      <div className="flex w-[200vw] h-screen transition-transform duration-700 ease-in-out" id="swipe-container">
+        {/* Page 1: Intro (Avatar + Decor) */}
+        <section className="w-screen h-screen flex flex-col items-center justify-center p-6">
+          <div className="relative group/avatar cursor-grab active:cursor-grabbing">
+             <div className="w-40 h-40 rounded-full bg-[#050505] p-2 relative shadow-[0_0_30px_rgba(255,255,255,0.1)] border border-white/10">
+                <div className="w-full h-full rounded-full overflow-hidden bg-black/40">
+                  <img src={config.avatarUrl} alt={config.displayName} className="w-full h-full object-cover" />
+                </div>
+             </div>
+             <AvatarDecoration decor={config.avatarDecor} customDecorUrl={config.customAvatarDecorUrl} />
+          </div>
+          <p className="mt-8 text-white text-xl animate-pulse">Kéo để xem profile</p>
+        </section>
 
-      {/* 2. Top Minimal Bar */}
-      <header className="relative z-30 w-full max-w-5xl px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-gray-400">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
-          <span className="text-white font-bold tracking-tight">EM DẦN XA ĐI'S PROFILE</span>
-          <span className="text-gray-600 hidden sm:inline">·</span>
-          <span className="text-cyan-400 font-mono font-semibold hidden sm:inline">ROBLOX: 40wf</span>
-        </div>
+        {/* Page 2: Full Profile */}
+        <section className="w-screen h-screen flex items-center justify-center p-3">
+          <DiscordProfileCard
+            config={config}
+            views={views}
+            likes={likes}
+            hasLiked={hasLiked}
+            onLike={handleLike}
+          />
+        </section>
+      </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2">
-          {/* Weather / Glitch Effect Cycle Button */}
-          <button
-            onClick={() => {
-              const effects: ('matrix' | 'rain' | 'sakura' | 'snow' | 'stars' | 'none')[] = [
-                'matrix',
-                'rain',
-                'sakura',
-                'snow',
-                'stars',
-                'none',
-              ];
-              const nextIdx = (effects.indexOf(config.backgroundEffect) + 1) % effects.length;
-              setConfig({ ...config, backgroundEffect: effects[nextIdx] });
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/50 hover:bg-black/80 border border-cyan-500/20 text-xs text-cyan-300 hover:text-white backdrop-blur-md transition-all shadow"
-            title={`Hiệu ứng nền: ${config.backgroundEffect}. Bấm để chuyển đổi.`}
-          >
-            <CloudRain className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="capitalize hidden sm:inline">{config.backgroundEffect}</span>
-          </button>
-
-          {/* Sound Toggle Button */}
-          <button
-            onClick={toggleSound}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs backdrop-blur-md transition-all shadow ${
-              isAudioPlaying
-                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
-                : 'bg-black/50 border-white/10 text-gray-400 hover:text-white hover:bg-black/80'
-            }`}
-            title={isAudioPlaying ? 'Tắt tiếng' : 'Phát nhạc'}
-          >
-            {isAudioPlaying ? (
-              <>
-                <Volume2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="hidden sm:inline">Audio On</span>
-              </>
-            ) : (
-              <>
-                <VolumeX className="w-3.5 h-3.5 text-gray-500" />
-                <span className="hidden sm:inline">Muted</span>
-              </>
-            )}
-          </button>
-
-          {/* Share Profile Link */}
-          <button
-            onClick={handleShare}
-            className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-black/50 hover:bg-black/80 border border-white/10 text-xs text-gray-300 hover:text-white backdrop-blur-md transition-all shadow flex items-center gap-1.5"
-            title="Sao chép liên kết trang web"
-          >
-            {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{copiedLink ? 'Đã sao chép' : 'Chia sẻ'}</span>
-          </button>
-        </div>
-      </header>
-
-      {/* 3. Center Profile Card */}
-      <section className="relative z-20 flex-1 flex items-center justify-center p-3 sm:p-6 w-full max-w-5xl">
-        <DiscordProfileCard
-          config={config}
-          views={views}
-          likes={likes}
-          hasLiked={hasLiked}
-          onLike={handleLike}
-        />
-      </section>
-
-      {/* 4. Bottom Synced Karaoke Lyrics & Music Player (With Volume & Track Picker) */}
-      {config.audio.enabled && (
-        <SyncedLyricsPlayer
-          tracks={PLAYLIST_TRACKS}
-          currentTrackIndex={currentTrackIndex}
-          isPlaying={isAudioPlaying}
-          volume={config.audio.volume}
-          onTogglePlay={toggleSound}
-          onSkipTrack={handleSkipTrack}
-          onPrevTrack={handlePrevTrack}
-          onSelectTrack={handleSelectTrack}
-          onVolumeChange={(vol) => {
-            setConfig((prev) => ({
-              ...prev,
-              audio: { ...prev.audio, volume: vol },
-            }));
-            audioEngine.setVolume(vol);
-          }}
-          onCustomAudioChange={handleCustomAudioChange}
-          customAudioUrl={config.audio.customAudioUrl}
-        />
-      )}
-
-      {/* 5. Bottom Footer (Clean, No customizer button) */}
-      <footer className="relative z-20 w-full py-4 px-4 text-center text-xs text-gray-500">
-        <p className="flex items-center justify-center gap-2 flex-wrap">
-          <span>Em dần xa đi · Official Discord Profile</span>
-          <span aria-hidden="true">·</span>
-          <span className="text-cyan-400/80 font-mono">Roblox: 40wf</span>
-          <span aria-hidden="true">·</span>
-          <span>4 Tracks Karaoke Synced</span>
-        </p>
-      </footer>
-
-      {/* 6. Click-to-Enter Overlay (Atmospheric Intro Screen) */}
-      {!entered && (
-        <ClickToEnterOverlay
-          onEnter={handleEnter}
-          displayName={config.displayName}
-        />
-      )}
+      {/* Swipe Listeners */}
+      <div 
+        className="fixed inset-0 w-full h-full z-50 touch-pan-x"
+        onTouchStart={(e) => {
+          (window as any).startX = e.touches[0].pageX;
+        }}
+        onTouchEnd={(e) => {
+          const container = document.getElementById('swipe-container');
+          if (!container) return;
+          const diff = (window as any).startX - e.changedTouches[0].pageX;
+          if (diff > 50) container.style.transform = 'translateX(-100vw)';
+          else if (diff < -50) container.style.transform = 'translateX(0)';
+        }}
+      />
     </main>
   );
 }

@@ -160,12 +160,12 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
           lightningTimer = 0;
         }
         if (lightningFlash > 0) {
-          ctx.fillStyle = `rgba(180, 200, 255, ${lightningFlash})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${lightningFlash})`;
           ctx.fillRect(0, 0, width, height);
           lightningFlash -= 0.015;
         }
 
-        ctx.strokeStyle = 'rgba(174, 194, 230, 0.5)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         for (let i = 0; i < rainDrops.length; i++) {
@@ -184,7 +184,7 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
                 y: height - Math.random() * 15,
                 radius: 1,
                 maxRadius: 4 + Math.random() * 4,
-                opacity: 0.4,
+                opacity: 0.2,
               });
             }
             drop.y = -drop.length;
@@ -196,7 +196,7 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
         // Splashes
         for (let i = splashes.length - 1; i >= 0; i--) {
           const s = splashes[i];
-          ctx.strokeStyle = `rgba(174, 194, 230, ${s.opacity})`;
+          ctx.strokeStyle = `rgba(255, 255, 255, ${s.opacity})`;
           ctx.beginPath();
           ctx.ellipse(s.x, s.y, s.radius * 2, s.radius, 0, 0, Math.PI * 2);
           ctx.stroke();

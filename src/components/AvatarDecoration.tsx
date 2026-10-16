@@ -15,7 +15,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
         <img
           src={customDecorUrl}
           alt="Avatar Decoration"
-          className="absolute inset-0 w-full h-full object-contain z-50 pointer-events-none"
+          className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] object-contain z-50 pointer-events-none"
           onError={(e) => {
             (e.currentTarget as HTMLElement).style.display = 'none';
           }}
