@@ -135,7 +135,7 @@ export function DiscordProfileCard({
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src =
-                      'https://api.dicebear.com/9.x/avataaars/svg?seed=tyLNTV1706';
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm4ft_l3UP4HWpzArGJaabiH2Muv648CtDVcBwMQl43Q&s';
                   }}
                 />
               </div>
