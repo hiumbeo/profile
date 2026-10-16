@@ -302,6 +302,10 @@ class AudioEngine {
       track_3: 'xpfQf3zWQvA',
       track_4: 'cHHLHGNpCSA',
       track_5: 'nyFi7rAYw-4',
+      track_6: 'o3EAy282el0',
+      track_7: 'G29TQeRXMWs',
+      track_8: 'bhlMOw-RGZo',
+      track_9: 'mnBAZ-VkuEg',
     };
 
     const targetYtId = YT_MAP[type] || 'NwFVSclD_uc';

@@ -383,7 +383,7 @@ export function BackgroundCanvas({ effect, intensity }: BackgroundCanvasProps) {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-10 w-full h-full"
-      style={{ opacity: 0.95 }}
+      style={{ opacity: 0.5 }}
     />
   );
 }

@@ -168,7 +168,7 @@ export function SyncedLyricsPlayer({
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-40 max-w-sm sm:max-w-md w-[calc(100vw-2rem)] select-none">
+    <div id="music-player" className="fixed bottom-4 left-4 z-50 max-w-sm sm:max-w-md w-[calc(100vw-2rem)] select-none">
       {/* 1. Main Music Widget */}
       <div className="bg-[#111214]/95 backdrop-blur-2xl border border-cyan-500/30 p-3 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.85)] flex flex-col gap-2.5">
         <div className="flex items-center gap-3">
@@ -319,7 +319,7 @@ export function SyncedLyricsPlayer({
             <div className="flex items-center justify-between">
               <h4 className="font-bold text-cyan-300 flex items-center gap-1.5">
                 <Music2 className="w-3.5 h-3.5" />
-                <span>4 Bài Nhạc & Nơi Bỏ File MP3</span>
+                <span>{tracks.length} Bài Nhạc & Nơi Bỏ File MP3</span>
               </h4>
               <button
                 onClick={() => setIsSourceModalOpen(false)}

@@ -290,7 +290,24 @@ export default function App() {
       />
 
       {/* Swipeable Container */}
-      <div className="flex w-[200vw] h-screen transition-transform duration-700 ease-in-out" id="swipe-container">
+      <div 
+        className="flex w-[200vw] h-screen transition-transform duration-700 ease-in-out" 
+        id="swipe-container"
+        onTouchStart={(e) => {
+          // Ignore if touching the music player
+          if ((e.target as HTMLElement).closest('#music-player')) return;
+          (window as any).startX = e.touches[0].pageX;
+        }}
+        onTouchEnd={(e) => {
+          // Ignore if touching the music player
+          if ((e.target as HTMLElement).closest('#music-player')) return;
+          const container = document.getElementById('swipe-container');
+          if (!container) return;
+          const diff = (window as any).startX - e.changedTouches[0].pageX;
+          if (diff > 50) container.style.transform = 'translateX(-100vw)';
+          else if (diff < -50) container.style.transform = 'translateX(0)';
+        }}
+      >
         {/* Page 1: Intro (Avatar + Decor) */}
         <section className="w-screen h-screen flex flex-col items-center justify-center p-6">
           <div className="relative group/avatar cursor-grab active:cursor-grabbing">
@@ -305,7 +322,7 @@ export default function App() {
         </section>
 
         {/* Page 2: Full Profile */}
-        <section className="w-screen h-screen flex items-center justify-center p-3">
+        <section className="w-screen h-screen flex flex-col items-center justify-center p-3">
           <DiscordProfileCard
             config={config}
             views={views}
@@ -313,23 +330,31 @@ export default function App() {
             hasLiked={hasLiked}
             onLike={handleLike}
           />
+          {/* Bottom Synced Karaoke Lyrics & Music Player */}
+          {config.audio.enabled && (
+            <SyncedLyricsPlayer
+              tracks={PLAYLIST_TRACKS}
+              currentTrackIndex={currentTrackIndex}
+              isPlaying={isAudioPlaying}
+              volume={config.audio.volume}
+              onTogglePlay={toggleSound}
+              onSkipTrack={handleSkipTrack}
+              onPrevTrack={handlePrevTrack}
+              onSelectTrack={handleSelectTrack}
+              onVolumeChange={(vol) => {
+                setConfig((prev) => ({
+                  ...prev,
+                  audio: { ...prev.audio, volume: vol },
+                }));
+                audioEngine.setVolume(vol);
+              }}
+              onCustomAudioChange={handleCustomAudioChange}
+              customAudioUrl={config.audio.customAudioUrl}
+            />
+          )}
         </section>
       </div>
 
-      {/* Swipe Listeners */}
-      <div 
-        className="fixed inset-0 w-full h-full z-50 touch-pan-x"
-        onTouchStart={(e) => {
-          (window as any).startX = e.touches[0].pageX;
-        }}
-        onTouchEnd={(e) => {
-          const container = document.getElementById('swipe-container');
-          if (!container) return;
-          const diff = (window as any).startX - e.changedTouches[0].pageX;
-          if (diff > 50) container.style.transform = 'translateX(-100vw)';
-          else if (diff < -50) container.style.transform = 'translateX(0)';
-        }}
-      />
     </main>
   );
 }
