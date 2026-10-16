@@ -280,10 +280,6 @@ export default function App() {
     }
   };
 
-  if (!isUnlocked) {
-    return <PasswordModal onUnlock={() => setIsUnlocked(true)} />;
-  }
-
   return (
     <main className="relative min-h-screen w-full flex flex-col justify-between items-center overflow-x-hidden bg-[#070a0e] text-white selection:bg-cyan-500 selection:text-black">
       {/* 1. Dynamic Canvas Weather Background (Glitch Matrix / Rain) */}
