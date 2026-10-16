@@ -18,13 +18,14 @@ import {
   Heart
 } from 'lucide-react';
 
-const STORAGE_KEY = 'phu_profile_config_v9_rain_thunder';
+const STORAGE_KEY = 'phu_profile_config_v12_enter_screen';
 
 export default function App() {
   const [config, setConfig] = useState<ProfileConfig>(() => {
     try {
       if (typeof window !== 'undefined') {
-        // Purge old cached storage containing cat decor or old matrix/404 effect
+        // Purge old cached storage containing previous names or old versions
+        localStorage.removeItem('phu_profile_config_v9_rain_thunder');
         localStorage.removeItem('phu_profile_config_v7_reyna_leer');
         localStorage.removeItem('phu_profile_config_v4_reyna');
         localStorage.removeItem('phu_profile_config_v3');
@@ -37,9 +38,9 @@ export default function App() {
           return {
             ...DEFAULT_PROFILE,
             ...parsed,
-            username: parsed.username || '40wf',
-            displayName: parsed.displayName || 'Em dần xa đi',
-            avatarUrl: parsed.avatarUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm4ft_l3UP4HWpzArGJaabiH2Muv648CtDVcBwMQl43Q&s',
+            username: '40wf',
+            displayName: 'Em dần xa đi',
+            avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm4ft_l3UP4HWpzArGJaabiH2Muv648CtDVcBwMQl43Q&s',
             aboutMe: parsed.aboutMe || 'I am a curious learner who loves exploring new ideas and solving problems every day',
             bio: parsed.bio || 'I am a curious learner who loves exploring new ideas and solving problems every day',
             bioLink: parsed.bioLink || 'https://zyo.lol/z0j9',
@@ -76,6 +77,9 @@ export default function App() {
 
     return {
       ...DEFAULT_PROFILE,
+      displayName: 'Em dần xa đi',
+      username: '40wf',
+      avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm4ft_l3UP4HWpzArGJaabiH2Muv648CtDVcBwMQl43Q&s',
       avatarDecor: 'reyna_eye',
       customAvatarDecorUrl: '/decorations/reyna_leer.gif',
       backgroundEffect: 'rain',
@@ -301,40 +305,21 @@ export default function App() {
         intensity={config.weatherIntensity}
       />
 
-      {/* Swipeable Container */}
-      <div 
-        className="flex w-[200vw] h-screen transition-transform duration-700 ease-in-out" 
-        id="swipe-container"
-        onTouchStart={(e) => {
-          // Ignore if touching the music player
-          if ((e.target as HTMLElement).closest('#music-player')) return;
-          (window as any).startX = e.touches[0].pageX;
-        }}
-        onTouchEnd={(e) => {
-          // Ignore if touching the music player
-          if ((e.target as HTMLElement).closest('#music-player')) return;
-          const container = document.getElementById('swipe-container');
-          if (!container) return;
-          const diff = (window as any).startX - e.changedTouches[0].pageX;
-          if (diff > 50) container.style.transform = 'translateX(-100vw)';
-          else if (diff < -50) container.style.transform = 'translateX(0)';
-        }}
-      >
-        {/* Page 1: Intro (Avatar + Decor) */}
-        <section className="w-screen h-screen flex flex-col items-center justify-center p-6">
-          <div className="relative group/avatar cursor-grab active:cursor-grabbing">
-             <div className="w-40 h-40 rounded-full bg-[#050505] p-2 relative shadow-[0_0_30px_rgba(255,255,255,0.1)] border border-white/10">
-                <div className="w-full h-full rounded-full overflow-hidden bg-black/40">
-                  <img src={config.avatarUrl} alt={config.displayName} className="w-full h-full object-cover" />
-                </div>
-             </div>
-             <AvatarDecoration decor={config.avatarDecor} customDecorUrl={config.customAvatarDecorUrl} />
-          </div>
-          <p className="mt-8 text-white text-xl animate-pulse">Kéo để xem profile</p>
-        </section>
+      {/* Click To Enter Screen */}
+      {!entered && (
+        <ClickToEnterOverlay
+          onEnter={handleEnter}
+          displayName={config.displayName}
+          username={config.username}
+          avatarUrl={config.avatarUrl}
+          avatarDecor={config.avatarDecor}
+          customAvatarDecorUrl={config.customAvatarDecorUrl}
+        />
+      )}
 
-        {/* Page 2: Full Profile */}
-        <section className="w-screen h-screen flex flex-col items-center p-3 overflow-y-auto">
+      {/* Main Profile View */}
+      <div className={`relative z-10 w-full min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 pb-28 md:pb-32 overflow-y-auto transition-all duration-700 ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+        <div className="w-full max-w-xl flex flex-col items-center justify-center my-auto pt-4 pb-8">
           <DiscordProfileCard
             config={config}
             views={views}
@@ -342,29 +327,30 @@ export default function App() {
             hasLiked={hasLiked}
             onLike={handleLike}
           />
-          {/* Bottom Synced Karaoke Lyrics & Music Player */}
-          {config.audio.enabled && (
-            <SyncedLyricsPlayer
-              tracks={PLAYLIST_TRACKS}
-              currentTrackIndex={currentTrackIndex}
-              isPlaying={isAudioPlaying}
-              volume={config.audio.volume}
-              onTogglePlay={toggleSound}
-              onSkipTrack={handleSkipTrack}
-              onPrevTrack={handlePrevTrack}
-              onSelectTrack={handleSelectTrack}
-              onVolumeChange={(vol) => {
-                setConfig((prev) => ({
-                  ...prev,
-                  audio: { ...prev.audio, volume: vol },
-                }));
-                audioEngine.setVolume(vol);
-              }}
-              onCustomAudioChange={handleCustomAudioChange}
-              customAudioUrl={config.audio.customAudioUrl}
-            />
-          )}
-        </section>
+        </div>
+
+        {/* Bottom Synced Karaoke Lyrics & Music Player */}
+        {config.audio.enabled && (
+          <SyncedLyricsPlayer
+            tracks={PLAYLIST_TRACKS}
+            currentTrackIndex={currentTrackIndex}
+            isPlaying={isAudioPlaying}
+            volume={config.audio.volume}
+            onTogglePlay={toggleSound}
+            onSkipTrack={handleSkipTrack}
+            onPrevTrack={handlePrevTrack}
+            onSelectTrack={handleSelectTrack}
+            onVolumeChange={(vol) => {
+              setConfig((prev) => ({
+                ...prev,
+                audio: { ...prev.audio, volume: vol },
+              }));
+              audioEngine.setVolume(vol);
+            }}
+            onCustomAudioChange={handleCustomAudioChange}
+            customAudioUrl={config.audio.customAudioUrl}
+          />
+        )}
       </div>
 
     </main>
