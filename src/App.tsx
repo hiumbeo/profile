@@ -57,9 +57,9 @@ export default function App() {
               totalDurationSeconds: 7200,
             },
             bannerUrl: 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
-            accountCreatedDate: '15 thg 10, 2026',
-            memberSince: '15 thg 10, 2026',
-            serverMemberSince: '15 thg 10, 2026',
+            accountCreatedDate: '26 thg 8, 2026',
+            memberSince: '26 thg 8, 2026',
+            serverMemberSince: '26 thg 8, 2026',
             backgroundEffect: 'matrix',
           };
         }
@@ -146,7 +146,7 @@ export default function App() {
             bannerUrl: 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
             accountCreatedDate: '15 thg 10, 2026',
             memberSince: '15 thg 10, 2026',
-            serverMemberSince: '15 thg 10, 2026',
+            serverMemberSince: '26 thg 8, 2026',
             badges: { ...prev.badges, ...data.badges },
           }));
         }
