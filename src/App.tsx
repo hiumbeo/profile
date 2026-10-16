@@ -322,7 +322,7 @@ export default function App() {
         </section>
 
         {/* Page 2: Full Profile */}
-        <section className="w-screen h-screen flex flex-col items-center justify-center p-3">
+        <section className="w-screen h-screen flex flex-col items-center p-3 overflow-y-auto">
           <DiscordProfileCard
             config={config}
             views={views}
