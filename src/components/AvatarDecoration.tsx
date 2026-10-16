@@ -11,7 +11,7 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
   return (
     <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center scale-125">
       {/* 0. DISCORD OFFICIAL CDN AVATAR DECORATION */}
-      {((decor === 'discord_native' && customDecorUrl) || (customDecorUrl && decor === 'discord_native')) && (
+      {decor === 'discord_native' && customDecorUrl && (
         <img
           src={customDecorUrl}
           alt="Discord Avatar Decoration"
@@ -21,27 +21,8 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
           }}
         />
       )}
-      {/* 1. SAKURA BLOSSOMS */}
-      {decor === 'sakura' && (
-        <svg className="w-full h-full animate-rotate-slow" viewBox="0 0 100 100" fill="none">
-          {/* Circular petal wreath */}
-          <circle cx="50" cy="50" r="42" stroke="rgba(244, 114, 182, 0.4)" strokeWidth="1.5" strokeDasharray="3 3" />
-          {/* Top Petals */}
-          <path d="M50 4 C48 10 40 12 45 18 C50 14 55 14 50 4Z" fill="#f472b6" filter="drop-shadow(0 0 3px #f43f5e)" />
-          <path d="M56 8 C57 14 65 14 60 20 C54 18 52 12 56 8Z" fill="#fb7185" />
-          <path d="M43 7 C40 13 32 14 36 21 C41 18 45 12 43 7Z" fill="#f472b6" />
-          {/* Bottom Petals */}
-          <path d="M50 96 C52 90 60 88 55 82 C50 86 45 86 50 96Z" fill="#f472b6" filter="drop-shadow(0 0 3px #f43f5e)" />
-          <path d="M42 92 C41 86 33 86 38 80 C44 82 46 88 42 92Z" fill="#fb7185" />
-          <path d="M58 92 C60 86 68 86 63 80 C58 82 55 88 58 92Z" fill="#f472b6" />
-          {/* Left/Right Blossoms */}
-          <circle cx="10" cy="50" r="3.5" fill="#fbcfe8" />
-          <circle cx="90" cy="50" r="3.5" fill="#fbcfe8" />
-          <circle cx="16" cy="32" r="2" fill="#fff" />
-          <circle cx="84" cy="68" r="2" fill="#fff" />
-        </svg>
-      )}
 
+      {/* 2. CYBERPUNK HUD VISOR */}
       {/* 2. CYBERPUNK HUD VISOR */}
       {decor === 'cyberpunk' && (
         <div className="relative w-full h-full flex items-center justify-center">
@@ -173,6 +154,16 @@ export function AvatarDecoration({ decor, customDecorUrl }: AvatarDecorationProp
                 <stop offset="100%" stopColor="#b91c1c" />
               </linearGradient>
             </defs>
+          </svg>
+        </div>
+      )}
+      {/* 9. WITCH HAT */}
+      {decor === 'witch_hat' && (
+        <div className="relative w-full h-full">
+          <svg className="w-full h-full animate-float" viewBox="0 0 100 100" fill="none">
+            <path d="M30 40 L50 10 L70 40 Z" fill="#4c1d95" stroke="#7e22ce" strokeWidth="2" />
+            <rect x="25" y="40" width="50" height="8" fill="#4c1d95" stroke="#7e22ce" strokeWidth="2" rx="2" />
+            <circle cx="50" cy="25" r="5" fill="#fbcfe8" />
           </svg>
         </div>
       )}

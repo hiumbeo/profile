@@ -220,6 +220,7 @@ export function CustomizerModal({
   };
 
   const avatarDecorList: { id: AvatarDecorType; label: string }[] = [
+    { id: 'reyna_eye', label: 'Reyna Eye (Valorant Con Mắt Tím)' },
     { id: 'discord_native', label: 'Discord Account Decor (Official)' },
     { id: 'cyberpunk', label: 'Cyberpunk Visor' },
     { id: 'sakura', label: 'Sakura Wreath' },
@@ -229,6 +230,7 @@ export function CustomizerModal({
     { id: 'cosmic_ring', label: 'Cosmic Orbit' },
     { id: 'glitch_crown', label: 'Glitch Crown' },
     { id: 'fire_aura', label: 'Fire Flame Aura' },
+    { id: 'witch_hat', label: 'Witch Hat' },
     { id: 'none', label: 'None' },
   ];
 
@@ -696,33 +698,38 @@ export function CustomizerModal({
                 </div>
               </div>
 
-              {/* 3. Preset procedural sound engine options */}
+              {/* 3. Danh sách 5 bài hát YouTube chất lượng cao */}
               <div>
                 <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  3. Hoặc chọn âm thanh Lofi / Synth tích hợp sẵn (không sợ die link):
+                  3. Chọn nhanh bài hát YouTube:
                 </label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
-                    { id: 'synth_lofi', label: 'Rain & Lofi Chords' },
-                    { id: 'synth_ambient', label: 'Cosmic Ambient Pad' },
-                    { id: 'synth_cyber', label: 'Cyber Synthwave' },
+                    { id: 'NwFVSclD_uc', title: 'I Love You So', artist: 'The Walters' },
+                    { id: 'Oextk-If8HQ', title: 'Somewhere Only We Know', artist: 'Keane' },
+                    { id: 'xpfQf3zWQvA', title: 'Nuts (That\'s The Best Part)', artist: 'Lil Peep ft. rainy bear' },
+                    { id: 'cHHLHGNpCSA', title: 'Waiting For Love', artist: 'Avicii' },
+                    { id: 'nyFi7rAYw-4', title: 'Vừa Hận Vừa Yêu (Đường Dài Em Đi)', artist: 'Trung Tự · Kuma Sorai' },
                   ].map((s) => (
                     <button
                       key={s.id}
                       type="button"
                       onClick={() => {
                         updateConfig({
-                          audio: { ...config.audio, type: s.id as any }
+                          audio: {
+                            ...config.audio,
+                            type: 'youtube',
+                            title: s.title,
+                            artist: s.artist,
+                            customAudioUrl: undefined,
+                          }
                         });
                         setTimeout(onAudioChange, 50);
                       }}
-                      className={`p-2.5 rounded-lg border text-xs font-semibold transition-all ${
-                        config.audio.type === s.id
-                          ? 'bg-purple-900/50 border-purple-500 text-white'
-                          : 'bg-[#2b2d31] border-white/5 text-gray-400 hover:text-white'
-                      }`}
+                      className="p-2.5 rounded-lg border text-left text-xs transition-all bg-[#1a1b1e] border-white/5 hover:border-cyan-500/50 hover:bg-white/5 text-gray-200"
                     >
-                      {s.label}
+                      <p className="font-semibold text-white truncate">{s.title}</p>
+                      <p className="text-[10px] text-gray-400 truncate">{s.artist}</p>
                     </button>
                   ))}
                 </div>

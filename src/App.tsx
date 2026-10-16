@@ -6,6 +6,7 @@ import { BackgroundCanvas } from './components/BackgroundCanvas';
 import { DiscordProfileCard } from './components/DiscordProfileCard';
 import { ClickToEnterOverlay } from './components/ClickToEnterOverlay';
 import { SyncedLyricsPlayer } from './components/SyncedLyricsPlayer';
+import { PasswordModal } from './components/PasswordModal';
 import { PLAYLIST_TRACKS } from './utils/lyricsData';
 import { 
   Volume2, 
@@ -17,7 +18,7 @@ import {
   Heart
 } from 'lucide-react';
 
-const STORAGE_KEY = 'phu_profile_config_v3';
+const STORAGE_KEY = 'phu_profile_config_v4_reyna';
 
 export default function App() {
   const [config, setConfig] = useState<ProfileConfig>(() => {
@@ -31,6 +32,29 @@ export default function App() {
             ...parsed,
             username: 'tyLNTV1706',
             displayName: 'Phú ⛧',
+            aboutMe: 'I am a curious learner who loves exploring new ideas and solving problems every day',
+            bio: 'I am a curious learner who loves exploring new ideas and solving problems every day',
+            bioLink: 'https://zyo.lol/z0j9',
+            statusText: 'Đang chơi Roblox',
+            avatarDecor: 'reyna_eye',
+            customAvatarDecorUrl: undefined,
+            profileEffect: 'sakura_drift_left',
+            audio: {
+              ...DEFAULT_PROFILE.audio,
+              title: 'I Love You So',
+              artist: 'The Walters',
+              type: 'youtube',
+              volume: 0.6,
+            },
+            activity: {
+              type: 'game',
+              title: 'Roblox',
+              subtitle: 'Đang chơi Roblox',
+              details: 'Roblox · tyLNTV1706',
+              image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpdxiBL2Haw7rFib6J1m5bLRJ-6qoXKlZZFKkBRAMtqw&s=10',
+              elapsedSeconds: 1240,
+              totalDurationSeconds: 7200,
+            },
             bannerUrl: 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
             accountCreatedDate: '15 thg 10, 2026',
             memberSince: '15 thg 10, 2026',
@@ -46,14 +70,15 @@ export default function App() {
     return DEFAULT_PROFILE;
   });
 
+  const [isUnlocked, setIsUnlocked] = useState(false);
   const [entered, setEntered] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
-  // Views & Likes State
-  const [views, setViews] = useState(1284);
-  const [likes, setLikes] = useState(342);
+  // Real Views & Likes State (Accurate, Not fake numbers)
+  const [views, setViews] = useState(1);
+  const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(() => {
     try {
       return localStorage.getItem('phu_has_liked') === 'true';
@@ -113,8 +138,10 @@ export default function App() {
             displayName: data.displayName || prev.displayName,
             username: data.username || prev.username,
             avatarUrl: data.avatarUrl || prev.avatarUrl,
-            customAvatarDecorUrl: data.avatarDecorUrl || prev.customAvatarDecorUrl,
-            avatarDecor: data.avatarDecorUrl ? 'discord_native' : prev.avatarDecor,
+            // Keep Reyna Glowing Purple Eye decor as requested by He
+            avatarDecor: 'reyna_eye',
+            customAvatarDecorUrl: undefined,
+            profileEffect: 'sakura_drift_left',
             bannerUrl: 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
             accountCreatedDate: '15 thg 10, 2026',
             memberSince: '15 thg 10, 2026',
@@ -150,9 +177,8 @@ export default function App() {
     setEntered(true);
     if (config.audio.enabled) {
       const activeTrack = PLAYLIST_TRACKS[currentTrackIndex % PLAYLIST_TRACKS.length];
-      const audioSource = config.audio.customAudioUrl || activeTrack.url;
       audioEngine.setVolume(config.audio.volume);
-      audioEngine.play(activeTrack.type, audioSource);
+      audioEngine.play(activeTrack.type, config.audio.customAudioUrl, activeTrack.youtubeId);
       setIsAudioPlaying(true);
     }
   };
@@ -166,9 +192,8 @@ export default function App() {
     setIsAudioPlaying(nextPlaying);
     if (nextPlaying) {
       const activeTrack = PLAYLIST_TRACKS[currentTrackIndex % PLAYLIST_TRACKS.length];
-      const audioSource = config.audio.customAudioUrl || activeTrack.url;
       audioEngine.setVolume(config.audio.volume);
-      audioEngine.play(activeTrack.type, audioSource);
+      audioEngine.play(activeTrack.type, config.audio.customAudioUrl, activeTrack.youtubeId);
     } else {
       audioEngine.stop();
     }
@@ -185,10 +210,11 @@ export default function App() {
         title: nextTrack.title,
         artist: nextTrack.artist,
         type: nextTrack.type,
+        customAudioUrl: undefined,
       },
     }));
     audioEngine.setVolume(config.audio.volume);
-    audioEngine.play(nextTrack.type, config.audio.customAudioUrl || nextTrack.url);
+    audioEngine.play(nextTrack.type, undefined, nextTrack.youtubeId);
     setIsAudioPlaying(true);
   };
 
@@ -203,10 +229,11 @@ export default function App() {
         title: prevTrack.title,
         artist: prevTrack.artist,
         type: prevTrack.type,
+        customAudioUrl: undefined,
       },
     }));
     audioEngine.setVolume(config.audio.volume);
-    audioEngine.play(prevTrack.type, config.audio.customAudioUrl || prevTrack.url);
+    audioEngine.play(prevTrack.type, undefined, prevTrack.youtubeId);
     setIsAudioPlaying(true);
   };
 
@@ -220,10 +247,11 @@ export default function App() {
         title: track.title,
         artist: track.artist,
         type: track.type,
+        customAudioUrl: undefined,
       },
     }));
     audioEngine.setVolume(config.audio.volume);
-    audioEngine.play(track.type, config.audio.customAudioUrl || track.url);
+    audioEngine.play(track.type, undefined, track.youtubeId);
     setIsAudioPlaying(true);
   };
 
@@ -251,6 +279,10 @@ export default function App() {
       setTimeout(() => setCopiedLink(false), 2000);
     }
   };
+
+  if (!isUnlocked) {
+    return <PasswordModal onUnlock={() => setIsUnlocked(true)} />;
+  }
 
   return (
     <main className="relative min-h-screen w-full flex flex-col justify-between items-center overflow-x-hidden bg-[#070a0e] text-white selection:bg-cyan-500 selection:text-black">

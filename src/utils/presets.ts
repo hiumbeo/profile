@@ -6,9 +6,9 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   vanitySlug: 'phu',
   pronouns: 'he/him',
   avatarUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&auto=format&fit=crop&q=80',
-  avatarDecor: 'cyberpunk',
+  avatarDecor: 'reyna_eye',
   status: 'dnd',
-  statusText: 'playing Roblox as tyLNTV1706 ⚡',
+  statusText: 'Đang chơi Roblox',
   statusEmoji: '🎮',
   bannerType: 'image',
   bannerUrl: 'https://i.pinimg.com/originals/54/d7/30/54d7302c08408339574b95b9a911c51a.gif',
@@ -16,15 +16,9 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   bannerDecor: 'scanlines',
   primaryColor: '#0a100d',
   accentColor: '#00f0ff',
-  bio: `\`\`\`
-> Phú · Roblox ID: tyLNTV1706
-> building quiet things in the dark
-\`\`\`
-✦ *listening to late night frequencies*
-✦ **main game**: Roblox (Blox Fruits · Sea 3)
-✦ **quote**: "the world is quieter when it rains."
-
-[roblox.com/search/users?keyword=tyLNTV1706](https://www.roblox.com)`,
+  aboutMe: 'I am a curious learner who loves exploring new ideas and solving problems every day',
+  bio: 'I am a curious learner who loves exploring new ideas and solving problems every day',
+  bioLink: 'https://zyo.lol/z0j9',
   memberSince: '15 thg 10, 2026',
   serverMemberSince: '15 thg 10, 2026',
   accountCreatedDate: '15 thg 10, 2026',
@@ -50,9 +44,9 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   activity: {
     type: 'game',
     title: 'Roblox',
-    subtitle: 'Playing as tyLNTV1706',
-    details: 'Blox Fruits · Sea 3',
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300&auto=format&fit=crop&q=80',
+    subtitle: 'Đang chơi Roblox',
+    details: 'Roblox · tyLNTV1706',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpdxiBL2Haw7rFib6J1m5bLRJ-6qoXKlZZFKkBRAMtqw&s=10',
     elapsedSeconds: 1240,
     totalDurationSeconds: 7200,
   },
@@ -60,12 +54,13 @@ export const DEFAULT_PROFILE: ProfileConfig = {
     { id: '1', platform: 'roblox', url: 'https://www.roblox.com/search/users?keyword=tyLNTV1706', label: 'Roblox', accountName: 'tyLNTV1706' },
   ],
   backgroundEffect: 'matrix',
+  profileEffect: 'sakura_drift_left',
   weatherIntensity: 8,
   audio: {
     enabled: true,
-    title: 'Late Night Rose (not_my_name999)',
-    artist: 'not_my_name999 · Chill Vibe',
-    type: 'synth_lofi',
+    title: 'I Love You So',
+    artist: 'The Walters',
+    type: 'youtube',
     volume: 0.6,
   },
   clickToEnter: true,

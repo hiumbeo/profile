@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
 
 // Helper to resolve Discord flags into badges
 function calculateDiscordBadges(flags: number) {
@@ -361,7 +361,7 @@ function loadStats(): { views: number; likes: number } {
   } catch {
     // fallback
   }
-  return { views: 1284, likes: 342 };
+  return { views: 1, likes: 0 };
 }
 
 function saveStats(stats: { views: number; likes: number }) {
@@ -393,6 +393,33 @@ app.post('/api/stats/like', (_req: Request, res: Response) => {
 
 // Serve public music files
 app.use('/music', express.static(path.join(__dirname, 'public', 'music')));
+
+// Upload MP3 directly to server (for Termux or custom web hosting)
+app.post('/api/upload-music', (req: Request, res: Response) => {
+  try {
+    const { trackId, base64Data, filename } = req.body;
+    if (!base64Data) {
+      return res.status(400).json({ error: 'Missing audio base64 data' });
+    }
+    const cleanBase64 = base64Data.replace(/^data:[^;]+;base64,/, '');
+    const buffer = Buffer.from(cleanBase64, 'base64');
+    const musicDir = path.join(__dirname, 'public', 'music');
+    if (!fs.existsSync(musicDir)) {
+      fs.mkdirSync(musicDir, { recursive: true });
+    }
+    const safeName = trackId ? `track${trackId}.mp3` : (filename ? filename.replace(/[^a-zA-Z0-9._-]/g, '_') : 'custom.mp3');
+    const targetPath = path.join(musicDir, safeName);
+    fs.writeFileSync(targetPath, buffer);
+    return res.json({ 
+      success: true, 
+      url: `/music/${safeName}?t=${Date.now()}`,
+      filename: safeName
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Upload failed';
+    return res.status(500).json({ error: msg });
+  }
+});
 
 // Vite middleware or production static files
 async function startServer() {

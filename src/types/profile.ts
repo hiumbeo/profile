@@ -1,18 +1,18 @@
 export type AvatarDecorType = 
   | 'none'
   | 'discord_native'
-  | 'sakura'
   | 'cyberpunk'
   | 'cat_ears'
   | 'angel_halo'
   | 'demon_horns'
   | 'cosmic_ring'
   | 'glitch_crown'
-  | 'fire_aura';
+  | 'fire_aura'
+  | 'witch_hat';
 
 export type StatusType = 'online' | 'idle' | 'dnd' | 'streaming' | 'offline';
 
-export type WeatherEffectType = 'rain' | 'sakura' | 'snow' | 'matrix' | 'stars' | 'none';
+export type WeatherEffectType = 'rain' | 'snow' | 'matrix' | 'stars' | 'none';
 
 export type BannerDecorType = 'none' | 'sparkles' | 'scanlines' | 'rain_drops' | 'matrix' | 'stars';
 
@@ -57,7 +57,10 @@ export interface TrackItem {
   title: string;
   artist: string;
   url?: string;
-  type: 'synth_lofi' | 'synth_ambient' | 'synth_cyber' | 'custom_url' | 'uploaded_audio';
+  coverUrl?: string;
+  youtubeId?: string;
+  youtubeUrl?: string;
+  type: 'youtube' | 'custom_url' | 'uploaded_audio' | 'synth_lofi' | 'synth_ambient' | 'synth_cyber';
   lyrics: LyricLine[];
 }
 
@@ -98,6 +101,8 @@ export interface ProfileConfig {
   primaryColor: string;
   accentColor: string;
   bio: string;
+  aboutMe?: string;
+  bioLink?: string;
   memberSince: string;
   serverMemberSince: string;
   accountCreatedDate?: string;
@@ -109,12 +114,13 @@ export interface ProfileConfig {
   activity: RichPresenceActivity;
   socials: SocialConnection[];
   backgroundEffect: WeatherEffectType;
+  profileEffect?: 'none' | 'sakura_drift_left' | 'cyber_pulse' | 'magic_orbs';
   weatherIntensity: number; // 1-10
   audio: {
     enabled: boolean;
     title: string;
     artist: string;
-    type: 'synth_lofi' | 'synth_ambient' | 'synth_cyber' | 'custom_url' | 'uploaded_audio';
+    type: 'youtube' | 'custom_url' | 'uploaded_audio' | 'synth_lofi' | 'synth_ambient' | 'synth_cyber';
     customAudioUrl?: string;
     volume: number; // 0 to 1
     loop?: boolean;
